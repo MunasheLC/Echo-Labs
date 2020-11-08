@@ -9,12 +9,12 @@
 
 |                     |                   |
 |---------------------|-------------------|
-|Project Title:       | xxxxxx            |
-|Student 1 Name:      | xxxxxx            |
-|Student 1 ID:        | xxxxxx            |
-|Student 2 Name:      | xxxxxx            |
+|Project Title:       | ECHO Labs         |
+|Student 1 Name:      | Fiona Tuite       |
+|Student 1 ID:        | 16389251          |
+|Student 2 Name:      | Munashe Chifungo  |
 |Student 2 ID:        | xxxxxx            |
-|Project Supervisor:  | xxxxxx            |
+|Project Supervisor:  | Monica Ward       |
 
 > Ensure that the Supervisor formally agrees to supervise your project; this is only recognised once the
 > Supervisor assigns herself/himself via the project Dashboard.
