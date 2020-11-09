@@ -51,23 +51,29 @@ Before the Covid-19 pandemic hit the world, our labs in DCU would be held in a l
 ### Achievements
 
 > What functions will the project provide? Who will the users be?
-The Project will have the following features:
+
+Echo Labs will have the following features:
 
 **User Login**
-User logs in via username and password - which will be linked to a database. 
-The 3 types of users are: **Student, tutor and lecturer.**
+
+User logs in via username and password - which will be linked to a database.
+
+The 3 types of users are: **Student, Tutor and Lecturer.**
 
 **User DashBoard**
+
 Once logged in, users have a set of lab rooms on a user dashboard
+
 Or a user may have a room code to use to access a specific lab.
 
 **Within the Lab room:**
+
 Students, tutors and lecturers will have an entire view of the active users within the room.
 
 **User Permissions**
-Users will have different permissions:
 
 **Student -** will have basic permissions, which will allow them to:
+
 * Request help from an admin
 * Video or Audio call an admin
 * Screen share an admin
@@ -75,6 +81,7 @@ Users will have different permissions:
 * Ability to access a peer to peer code/text editor 
 
 **Tutor/lecturers-** will have admin permissions which will allow:
+
 * The ability to create rooms
 * Video or audio call students
 * Screenshare
@@ -83,6 +90,7 @@ Users will have different permissions:
 
 
 **Starting a Call**
+
 A student will have an option to request help from an admin. Once requested, a symbol will appear in the lab room.
 
 A tutor will accept this request and will be placed in a call with the student.
@@ -93,12 +101,15 @@ Everyone within the lab room outside the call, will be able to see that the user
 
 
 **Ended call**
+
 Once a call has ended, both the user and tutor will be placed back into the lab room, and their user ids won't indicate that they are in a call anymore to the rest of the class.
 
 **Broadcast messages**
+
 Broadcast messages can be used by tutors/hosts that will send a direct call to everyone. This can be used for example in order to explain what’s going to happen in the lab, or that the lab may be ending/to ask questions.
 
 **Ended lab session**
+
 Once the host closes the lab session, the user will be brought back to their user dashboard. Any chat messages from a tutor during the lab session will be stored and can be accessed by the student to view again.
 
 
@@ -118,30 +129,30 @@ React.js, Node.js, Firebase, Java, Javascript, CSS.
 
 > Describe the compiler, database, web server, etc., and any other software tools you plan to use.
 
-* **NodeJS -** This will be used for web server implementation
+* **NodeJS -** This will be used for web server implementation.
 * **webRTC -** This will be used in order to create audio, video, and screen share sessions between the Student and the lecturer/tutor.
-* **Firebase -**  Database API
-* **NodeJS libraries** - such as Socket.io
+* **Firebase -**  This will be used for database implementation.
+* **NodeJS libraries** - such as Socket.io.
 
 ### Hardware
 
 > Describe any non-standard hardware components which will be required.
 
-* Webcam for video chat
-* Microphone for audio chat
+* Webcam for video chat.
+* Microphone for audio chat.
 
 ### Learning Challenges
 
 > List the main new things (technologies, languages, tools, etc) that you will have to learn.
 
-* Web App Development
-* Firebase implementation
-* Frontend implementation using React.js
+* Web App Development.
+* Firebase implementation.
+* Front-end implementation using React.js
 * Server implementation with Node.js
 * Socket.io implementation.
-* How to Configure audio, video, screen share using webRTC.
-* How to implement a peer to peer code/text editor within a web application
-I* mplementation of a chat system
+* Configuration of audio, video and screen share using webRTC.
+* Implementation of a peer to peer code/text editor within a web application.
+* Implementation of a chat system.
 
 
 ### Breakdown of work
@@ -152,13 +163,28 @@ I* mplementation of a chat system
 > separate, clearly-defined tasks, and that those responsibilities substantially cover all of the work required
 > for the project.
 
-#### Student 1
+#### Munashe
 
 > *Student 1 should complete this section.*
 
-#### Student 2
+* Back-end implementation of login screen including the implementation of the database using Firebase. 
+* Setting up different user admin permissions. 
+* Back-end implementation of the user dashboard. 
+* Peer to peer text editor and chat system implementation.
+* Path configuration.
+
+
+#### Fiona
 
 > *Student 2 should complete this section.*
+
+* The back-end server implementation using Node.js. 
+* Front-end implementation of the login screen. 
+* Front-end implementation of the user dashboards. 
+* Path configuration
+* Front-end and back-end implementation of the lab room. 
+* Peer to Peer Audio, video and screen share implementation within a call. 
+
 
 
 
