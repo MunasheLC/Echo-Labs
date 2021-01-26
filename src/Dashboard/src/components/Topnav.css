@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+.top_nav {
+  background-color: transparent;
+  height: 50px;
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  align-items: center;
+}
+
+p {
+  /* color: #284163; */
+  color: rgba(255, 255, 255, 0.753);
+  font-family: "Permanent Marker", cursive;
+  font-size: 2rem;
+  padding-left: 165%;
+  top: 8px;
+  position: relative;
+}
+
+p1 {
+  font-family: "VT323", monospace;
+  padding-left: 270%;
+  position: relative;
+  top: -23px;
+  font-size: 1.6rem;
+  color: rgba(255, 255, 255, 0.616);
+}
