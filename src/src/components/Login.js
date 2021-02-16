@@ -59,7 +59,7 @@ export default function Login() {
       <Card className="animate__animated animate__bounceInRight" style={{background: "#36393F ", borderRadius:"8px", boxShadow:"box-shadow: 6px 6px 20px rgba(122, 122, 122, 0.212)", position: "fixed",
                      top: "20vh", right: "13vw",  width: "32vw", height: "56vh"}}>
         <Card.Body>
-          <h2 className="text-center mb-4" style={{color:"white"}}>Sign In</h2>
+          <h2 className="text-center mb-4" style={{color:"white"}}>Sign Innnnnn</h2>
           {error && (
             <Alert variant="danger" style={{ textAlign: "center" }}>
               {" "}
