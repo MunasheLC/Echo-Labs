@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-// import { Card, Button, Alert } from "react-bootstrap"
+import { Button} from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import {Helmet} from 'react-helmet';
 // import Cards from './Cards';
 // import Topnav from './Topnav';
-import './Dashboard.css'
 import { Card } from 'react-bootstrap';
 
 
@@ -141,6 +140,13 @@ const styles={
                     <i class="fas fa-user-secret fa-3x center" style={{position:"relative",top:"4vh",fontSize:"4.5rem",color:"white", width: "100%", textAlign:"center"}}></i>
                 </div>
 
+                <div className="w-100 text-center mt-2">
+                <Button variant="link" style={{color:"white", textDecoration:"none"}} onClick={handleLogout}>
+                    Logout
+                </Button>
+    
+      </div>
+
             </Card>
 
             <Card className="cards" style={CardStyle}>
@@ -170,7 +176,7 @@ const styles={
             </Card>
 
             <Card style={labCardStyles4}>
-                <Link to='/test' className = 'lab-links' style={{textDecoration: "none"}} >
+                <Link to='/update-profile' className = 'lab-links' style={{textDecoration: "none"}} >
                     <Card.Body>
                         <h2 style={{color:"white", textAlign:"center", marginTop: "50px"}}> Profile</h2>
                     </Card.Body>
