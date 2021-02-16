@@ -15,11 +15,6 @@ export default function Signup() {
     const history = useHistory()
 
 
-
-
-
-    
-    
    async function signupHandler (e) {
         e.preventDefault()
 
