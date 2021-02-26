@@ -9,6 +9,7 @@ import Login from "./Login"
 import ForgotPassword from "./ForgotPassword"
 import PrivateRoute from "./PrivateRoute"
 import UpdateProfile from "./UpdateProfile"
+import UserLabRooms from "./UserLabRoom"
 
 
 
@@ -21,6 +22,7 @@ function App() {
             <Switch>
               <PrivateRoute exact path="/" component={Dashboard}/>
               <PrivateRoute path="/update-profile" component={UpdateProfile}/>
+              <PrivateRoute path="/user-lab-rooms" component={UserLabRooms}/>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <Route path="/forgot-password" component={ForgotPassword} />
