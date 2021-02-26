@@ -14,10 +14,8 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_ECHO_MEASUREMENT_ID
 }
 
-//Remove this later
-// console.log(firebaseConfig)
-
 const app = firebase.initializeApp(firebaseConfig)
+
 export const auth = app.auth()
-export const database = app.firestore()
+export const db = app.firestore()
 export default app
