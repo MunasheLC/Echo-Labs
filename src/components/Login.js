@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useHistory, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import './Login.css';
 
 
 export default function Login() {
@@ -37,26 +38,28 @@ export default function Login() {
   return (
     <>
       <body style={styles}>
-      <Card className='logo' style={{border: "transparent",backgroundColor:"transparent",width:"32vw",height:"56vh", top:"20vh", left:"8vw"}}>
-        <Card.Body>
-          <h1 className="animate__animated animate__bounceInLeft" style ={{color:"white", fontSize:"5.5rem", position: "relative", top: "10vh"}}>Echo</h1>
-          <h1 className="animate__animated animate__jackInTheBox animate__delay-1s" style = {{color:"white",fontSize:"3.5rem", position: "relative",left:"10vw", top:"2vh"}} >Labs</h1>
 
-          <div className= "echo-lines" style={{position:"relative",left: "20px"}}>
-            <div className="animate__animated animate__bounceInDown" style={{backgroundColor:"white", width: "3px" ,height:"30px",position:"relative", left: "10.5vw",top: "-15vh"}}></div>
-            <div className="animate__animated animate__bounceInDown animate__delay-1s" style={{backgroundColor:"white", width: "3px" ,height:"30px" ,position:"relative", left: "11.5vw",top: "-20vh"}}></div>
-            <div className="animate__animated animate__bounceInDown animate__delay-2s" style={{backgroundColor:"white", width: "3px" ,height:"30px",position:"relative", left: "12.5vw",top: "-23vh"}}></div>
+      <div className='logo' style={{position:"fixed", marginTop:"20vh", marginLeft:"8vw",padding: "10vh",maxWidth:"25vw", float:"left", color:"white"}}>
+          <div className="logo-name">
+
+            <div className="echo-lines" style={{float: "right"}}>
+              <div id="x" className="animate__animated animate__bounceInDown"></div>
+              <div id="y" className="animate__animated animate__bounceInDown animate__delay-1s"></div>
+              <div id="z" className="animate__animated animate__bounceInDown animate__delay-2s"></div>
+            </div>
+
+          <h1 className="animate__animated animate__bounceInLeft" style={{}}>Echo</h1>
+          <h1 className="animate__animated animate__jackInTheBox animate__delay-1s" style={{}}>Labs</h1>
+          
           </div>
 
-          <p style={{color:"white",fontStyle:"italic", fontSize: "1.5rem", position:"relative", top:"-11vh"}}>Code Together</p>
+          <p className="title" style={{}}>Code Together</p>
 
-        </Card.Body>
-      </Card>
+      </div>
       
-      <Card className="animate__animated animate__bounceInRight" style={{background: "#36393F ", borderRadius:"8px", boxShadow:"box-shadow: 6px 6px 20px rgba(122, 122, 122, 0.212)", position: "fixed",
-                     top: "20vh", right: "13vw",  width: "32vw", height: "56vh"}}>
+      <Card id="login-container" className="animate__animated animate__bounceInRight">
         <Card.Body>
-          <h2 className="text-center mb-4" style={{color:"white"}}>Sign Innnnnn</h2>
+          <h2 className="text-center mb-4" style={{color:"white"}}>Sign In</h2>
           {error && (
             <Alert variant="danger" style={{ textAlign: "center" }}>
               {" "}
@@ -65,13 +68,13 @@ export default function Login() {
           )}
           <Form onSubmit={signupHandler}>
             <Form.Group id="email">
-              <Form.Label style={{color: "white"}}>Email</Form.Label>
-              <Form.Control style={{ background: "#212121 ", color:"white"}} type="email" ref={emailRef} required />
+              <Form.Label className="head" style={{}}>Email</Form.Label>
+              <Form.Control style={{ background: "#212121 ", color:"white", padding:"20px"}} type="email" ref={emailRef} required />
             </Form.Group>
 
             <Form.Group id="password" style={{paddingBottom:"10px"}}>
-              <Form.Label style={{color: "white"}}>Password</Form.Label>
-              <Form.Control style={{ background: "#212121 ", color:"white"}} type="password" ref={passwordRef} required />
+              <Form.Label className="head">Password</Form.Label>
+              <Form.Control style={{ background: "#212121 ", color:"white", padding:"20px"}} type="password" ref={passwordRef} required />
             </Form.Group>
 
             <Button disabled={loading} className="w-100" type="submit" style={{fontSize: "1.4rem"}}>
@@ -80,16 +83,15 @@ export default function Login() {
           </Form>
 
           <div className = "w-100 text-center mt-3">
-            <Link style={{color: "#7dcaf7", fontSize: "1.2rem"}} to="/forgot-password">Forgot password?</Link>
+            <Link className="items" to="/forgot-password">Forgot password?</Link>
           </div>
 
           <div className="w-100 text-center mt-2" style={{color:"white", paddingTop: "2px"}}>
-            Need an account? <Link style={{color: "#7dcaf7", fontSize: "1.2rem"}} to="/signup">Sign Up</Link>
+            Need an account? <Link className="items" to="/signup">Sign Up</Link>
           </div>
 
         </Card.Body>
       </Card>
-      
     </body>
     </>
   );

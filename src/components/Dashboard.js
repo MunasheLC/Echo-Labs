@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import { Button} from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
-import {Helmet} from 'react-helmet';
-// import Cards from './Cards';
-// import Topnav from './Topnav';
 import { Card } from 'react-bootstrap';
+import './Dashboard.css'
 
 
 
@@ -30,181 +28,77 @@ async function handleLogout(){
     }
 
 }
-
 const styles={
     backgroundColor: "#1c1f3e",
     width: "100vw",
     height: "100vh"
   }
 
-  const cardsStyles={
-    boxShadow: "15px 3px 20px -3px rgba(218, 156, 247, 0.363)",
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
-    height: "81.75vh",
-    width: "65vw",
-    margin: "0 auto",
-    top: "3vh",
-    backgroundColor: "#383f75",
-    borderRadius: "8px",
-    border:"transparent"
-  }
-
-  const cardFull={
-    boxShadow: "15px 3px 20px -3px rgba(218, 156, 247, 0.363)",
-    position: "relative",
-    display: "flex",
-    flex:"wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "81.75vh",
-    width: "65vw",
-    margin: "0 auto",
-    top: "3vh",
-    backgroundColor: "#383f75",
-    borderRadius: "8px",
-    border:"transparent"
-  }
-
-  const CardStyle={
-    top: "8vh",
-    border:"transparent",
-    backgroundColor: "transparent",
-  }
-
-  const labCardStyles1={
-    top: "15vh",
-    position: "relative",
-    marginLeft: "-60px",
-    borderRadius: "20px",
-    overflow: "hidden",
-    left: "-5vw",
-    boxShadow: "0 15px 25px rgba(0, 0, 0, 0.2)",
-    transition: "0.5s",
-    backgroundColor:"#7845d9", width:"15vw",height: "28vh",
-  }
-  const labCardStyles2={
-    top: "-13vh",
-    position: "relative",
-    left: "8vw",
-    borderRadius: "20px",
-    overflow: "hidden",
-    boxShadow: "0 15px 25px rgba(0, 0, 0, 0.2)",
-    transition: "0.5s",
-    backgroundColor:"#7fb1ca", width:"15vw",height: "28vh",
-  }
-  const labCardStyles3={
-    top: "-5vh",
-    position: "relative",
-    marginLeft: "-60px",
-    borderRadius: "20px",
-    overflow: "hidden",
-    left: "-5vw",
-    boxShadow: "0 15px 25px rgba(0, 0, 0, 0.2)",
-    transition: "0.5s",
-    backgroundColor:"#5c7fd3", width:"15vw",height: "28vh",
-  }
-  const labCardStyles4={
-    top: "-33vh",
-    position: "relative",
-    marginLeft: "-60px",
-    borderRadius: "20px",
-    overflow: "hidden",
-    left: "12vw",
-    boxShadow: "0 15px 25px rgba(0, 0, 0, 0.2)",
-    transition: "0.5s",
-    backgroundColor:"#6293ba", width:"15vw",height: "28vh",
-  }
     return (
      <>
     <body style={styles}>
     
-    <div className="Dash-contain" style={{position:"relative", top:"50px"}}>
+    <div id="dash-container" className="animate__animated animate__bounceInRight" style={{borderRadius:"8px",width:"65vw", maxWidth:"80vw" ,height:"80%",backgroundColor:"#383f75", position:"relative", top:"10vh", left:"18%", boxShadow:"15px -10px 10px -6px #00FFEF"}}>
+            <div className="dash-nav" style={{position:"relative", left: "20px",width:"20vw", height: "100%",backgroundColor:"#2a315d"}}>
 
-        <div className="animate__animated animate__bounceInRight" style={cardFull}>
-            <Card style={{position:"relative", left:"-12vw",width:"20vw", height: "82vh",backgroundColor:"#2a315d"}}>
-                <Card className="logo" style={{border: "transparent",backgroundColor:"transparent",width:"32vw",height:"56vh", top:"-9vh", left:"2vw"}}>
-                    <Card.Body>
-                        <div className= "echo-lines" style={{position:"relative",left: "-5vw", top:"25vh"}}>
-                            <div className="animate__animated animate__bounceInDown" style={{backgroundColor:"white", width: "3px" ,height:"30px",position:"relative", left: "10.5vw",top: "-15vh"}}></div>
-                            <div className="animate__animated animate__bounceInDown animate__delay-1s" style={{backgroundColor:"white", width: "3px" ,height:"30px" ,position:"relative", left: "11.5vw",top: "-20vh"}}></div>
-                            <div className="animate__animated animate__bounceInDown animate__delay-2s" style={{backgroundColor:"white", width: "3px" ,height:"30px",position:"relative", left: "12.5vw",top: "-23vh"}}></div>
+                <div className="dash-logo" style={{ position:"relative", top:"5vh",width:"10vw", height:"30vh" ,margin:"0 auto", color:"white"}}>
+                    
+                        <div className= "dash-echo-lines">
+                            <div id="dash-x" className="animate__animated animate__bounceInDown"></div>
+                            <div id="dash-y" className="animate__animated animate__bounceInDown animate__delay-1s"></div>
+                            <div id="dash-z" className="animate__animated animate__bounceInDown animate__delay-2s" ></div>
                         </div>
-                    </Card.Body>
-                </Card>
 
-                <div className="circle" style={{borderRadius: "50%", width: "100px", height:"100px", backgroundColor:"#1f2647", boxShadow:"15px 3px 20px -3px rgba(218, 156, 247, 0.363)", margin:"0 auto", position:"relative", top:"-42vh"}}>
-                    <i class="fas fa-user-secret fa-3x center" style={{position:"relative",top:"4vh",fontSize:"4.5rem",color:"white", width: "100%", textAlign:"center"}}></i>
+                        <div className="circle">
+                            <i class="fas fa-user-secret fa-3x center"></i>
+                        </div>
+                </div>
+            
+                <div className="w-100 text-center mt-2">
+                    <Button variant="link" onClick={handleLogout}>
+                        <h2 className="Button-text"> Logout</h2>
+                    </Button>
                 </div>
 
-                <div className="w-100 text-center mt-2">
-                <Button variant="link" style={{color:"white", textDecoration:"none"}} onClick={handleLogout}>
-                    Logout
-                </Button>
-    
-      </div>
+            </div>
 
-            </Card>
+            <div id="dash-card-container">
+                <div id="row">               
+                    <Card id="labCardStyles1" style={{backgroundColor:"#7845d9"}}>
+                        <Link to='/user-lab-rooms' className = 'lab-links' style={{textDecoration: "none"}}>
+                            <Card.Body>
+                                <h2 className="dash-cards-h2"> Lab Rooms</h2>
+                            </Card.Body>
+                        </Link>
+                    </Card>
 
-            <Card className="cards" style={CardStyle}>
-            <Card.Body>
-            <Card style={labCardStyles1}>
-                <Link to='/test' className = 'lab-links' style={{textDecoration: "none"}}>
-                    <Card.Body>
-                        <h2 style={{color:"white", textAlign:"center", marginTop: "50px"}}> Lab Rooms</h2>
-                    </Card.Body>
-                </Link>
-            </Card>
+                    <Card id="labCardStyles1" style={{backgroundColor:"#7fb1ca"}}>
+                        <Link to='/test' className = 'lab-links' style={{textDecoration: "none"}}>
+                            <Card.Body>
+                                <h2 className="dash-cards-h2"> Join </h2>
+                            </Card.Body>
+                        </Link>
+                    </Card>
 
-            <Card style={labCardStyles2}>
-                <Link to='/test' className = 'lab-links' style={{textDecoration: "none"}}>
-                    <Card.Body>
-                        <h2 style={{color:"white", textAlign:"center", marginTop: "50px"}}> Join </h2>
-                    </Card.Body>
-                </Link>
-            </Card>
+                    <Card id="labCardStyles1" style={{backgroundColor:"#5c7fd3"}}>
+                        <Link to='/test' className = 'lab-links' style={{textDecoration: "none"}} >
+                            <Card.Body>
+                                <h2 className="dash-cards-h2"> Stats</h2>
+                            </Card.Body>
+                        </Link>
+                    </Card>
 
-            <Card style={labCardStyles3}>
-                <Link to='/test' className = 'lab-links' style={{textDecoration: "none"}} >
-                    <Card.Body>
-                        <h2 style={{color:"white", textAlign:"center", marginTop: "50px"}}> Stats</h2>
-                    </Card.Body>
-                </Link>
-            </Card>
-
-            <Card style={labCardStyles4}>
-                <Link to='/update-profile' className = 'lab-links' style={{textDecoration: "none"}} >
-                    <Card.Body>
-                        <h2 style={{color:"white", textAlign:"center", marginTop: "50px"}}> Profile</h2>
-                    </Card.Body>
-                </Link>
-            </Card>
-            </Card.Body>
-            </Card>
+                    <Card id="labCardStyles1" style={{backgroundColor:"#6293ba"}}>
+                        <Link to='/update-profile' className= 'lab-links' style={{textDecoration: "none"}} >
+                            <Card.Body>
+                                <h2 className="dash-cards-h2"> Profile</h2>
+                            </Card.Body>
+                        </Link>
+                    </Card>
+                    </div>
+            </div>
         </div>
-        </div>
-
         </body>
-    {/* <Topnav/>
-    <Cards/> */}
-     {/* <Card>
-        <Card.Body>
-        <h2 className = "text-center mb-4">Profile</h2>
-        { error && <Alert variant="danger">{ error }</Alert> }
-        <strong> Email:</strong> {currentUser.email}
-        <Link to="/update-profile" className="btn btn-primary w-100 mt-3"> Update Profile </Link>
-        </Card.Body>
-    
-     </Card>
-     <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
-            Logout
-        </Button>
-    
-      </div> */}
     
      </>
     )
