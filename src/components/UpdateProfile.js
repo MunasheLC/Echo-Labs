@@ -13,8 +13,6 @@ export default function UpdateProfile() {
   const history = useHistory();
 
 
- 
-
    function profileUpdateHandler(e) {
     e.preventDefault();
 
@@ -54,9 +52,9 @@ export default function UpdateProfile() {
 
   return (
     <>
-      <Card>
+      <Card id="userinput-container">
         <Card.Body>
-          <h2 className="text-center mb-4">Update Profile</h2>
+          <h2 className="text-center mb-4" style={{ color: "white" }}>Update Profile</h2>
           {error && (
             <Alert variant="danger" style={{ textAlign: "center" }}>
               {" "}
@@ -65,7 +63,7 @@ export default function UpdateProfile() {
           )}
           <Form onSubmit={profileUpdateHandler}>
             <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
+              <Form.Label style={{ color: "white" }}>Email</Form.Label>
               <Form.Control
                 type="email"
                 ref={emailRef}
@@ -75,7 +73,7 @@ export default function UpdateProfile() {
             </Form.Group>
 
             <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
+              <Form.Label style={{ color: "white" }}>Password</Form.Label>
               <Form.Control
                 type="password"
                 ref={passwordRef}
@@ -84,18 +82,21 @@ export default function UpdateProfile() {
             </Form.Group>
 
             <Form.Group id="psasword-confirm">
-              <Form.Label>Confirm Password</Form.Label>
+              <Form.Label style={{ color: "white" }}>Confirm Password</Form.Label>
               <Form.Control type="password" ref={PasswordConfirmRef} />
             </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
+
+          	<Button disabled={loading} className="w-100" type="submit">
               Update Profile
             </Button>
+
           </Form>
+          <div className="w-100 text-center mt-2">
+            <Link to="/" style={{ color: "white" }}> Back to Dashboard </Link>
+          </div>
+
         </Card.Body>
       </Card>
-      <div className="w-100 text-center mt-2">
-        <Link to="/"> Back to Dashboard </Link>
-      </div>
     </>
   );
 }

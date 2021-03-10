@@ -35,7 +35,7 @@
   left: 45vh;
 }
 
-#labCardStyles1 {
+#lab-card-style-1 {
   width: 15vw;
   height: 28vh;
   border-radius: 20px;
@@ -46,7 +46,8 @@
   transition: 0.5s;
 }
 
-.card:hover {
+#lab-card-style-1:hover,
+#lab-card-style-2:hover {
   transform: scale(1.1);
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
 }
@@ -70,7 +71,7 @@
   margin-top: 50px;
 }
 
-#labCardStyles2 {
+#lab-card-style-2 {
   width: 12vw;
   height: 28vh;
   border-radius: 20px;
@@ -79,7 +80,41 @@
   background-color: #6292bada;
   margin-bottom: 30px;
 }
+#generated-text {
+  display: none;
+}
+#type-line {
+  position: relative;
+  top: 10%;
+  left: 26.5vw;
+  border-right: 2px solid rgba(255, 255, 255, 0.75);
+  font-size: 1.2rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  transform: translateY(-50%);
+}
+.animate-type {
+  animation: typewriter 2s steps(40) 1s 1 normal both,
+    TextCursor 500ms steps(40) 5s;
+}
 
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 13em;
+  }
+}
+@keyframes TextCursor {
+  from {
+    border-right-color: rgba(255, 255, 255, 0.75);
+  }
+  to {
+    border-right-color: transparent;
+  }
+}
 .Button-text {
   color: white;
   text-decoration: none;
@@ -87,8 +122,6 @@
   font-size: 1.3rem;
 }
 
-#lab-nav-links {
-}
 .Button-text-1 {
   display: list-item;
   text-decoration: none;

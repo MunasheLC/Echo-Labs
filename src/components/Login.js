@@ -28,16 +28,12 @@ export default function Login() {
     setLoading(false);
   }
 
-  const styles={
-    backgroundColor: "transparent",
-    background: "linear-gradient(120deg, rgba(0, 0, 0, 0) 30%, #7845d9 40%),url('https://www.toptal.com/designers/subtlepatterns/patterns/double-bubble-dark.png')",
-    width: "100vw",
-    height: "100vh"
-  }
+
+  document.body.style.backgroundColor = "transparent";
+  document.body.style.background="linear-gradient(120deg, rgba(0, 0, 0, 0) 30%, #7845d9 40%),url('https://www.toptal.com/designers/subtlepatterns/patterns/double-bubble-dark.png')";
 
   return (
     <>
-      <body style={styles}>
 
       <div className='logo' style={{position:"fixed", marginTop:"20vh", marginLeft:"8vw",padding: "10vh",maxWidth:"25vw", float:"left", color:"white"}}>
           <div className="logo-name">
@@ -92,7 +88,6 @@ export default function Login() {
 
         </Card.Body>
       </Card>
-    </body>
     </>
   );
 }
