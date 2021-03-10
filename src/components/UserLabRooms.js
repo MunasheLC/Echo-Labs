@@ -44,7 +44,7 @@ export default function UserLabRooms() {
 
 					<div className="w-100 text-center mt-2" style={{position:"relative",height:"45vh"}}>
 						<ul className="nav flex-column">
-							<Link to='/' style={{}}>
+							<Link to='/dashboard' style={{}}>
 								<Button variant="link">
 									<h2 className="Button-text-1"> Dashboard</h2>
 								</Button>

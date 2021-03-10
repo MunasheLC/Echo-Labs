@@ -9,21 +9,11 @@ import Login from "./Login"
 import ForgotPassword from "./ForgotPassword"
 import PrivateRoute from "./PrivateRoute"
 import UpdateProfile from "./UpdateProfile"
-<<<<<<< HEAD
 import UserLabRooms from "./UserLabRooms"
 import CreateLabRoom from "./CreateUserLabRoom"
 import join from "./Join"
-=======
-<<<<<<< HEAD
 import Room from "./Room"
 import createRoom from "./CreateRoom"
-=======
-import UserLabRooms from "./UserLabRoom"
->>>>>>> 112151b2c1a37101b1ed61e6f30922e209a120b4
-
->>>>>>> 287b9730e53ad7de571f6276fa118dfb1c05e728
-
-
 
 function App() {
   return (
