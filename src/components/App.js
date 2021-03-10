@@ -9,6 +9,8 @@ import Login from "./Login"
 import ForgotPassword from "./ForgotPassword"
 import PrivateRoute from "./PrivateRoute"
 import UpdateProfile from "./UpdateProfile"
+import Room from "./Room"
+import createRoom from "./CreateRoom"
 
 
 
@@ -19,11 +21,13 @@ function App() {
         <Router>
           <AuthProvider>
             <Switch>
-              <PrivateRoute exact path="/" component={Dashboard}/>
+              <PrivateRoute exact path="/dashboard" component={Dashboard}/>
               <PrivateRoute path="/update-profile" component={UpdateProfile}/>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/create-room" component={createRoom}/>
+              <Route path="/room/:roomID" component={Room}/>
             </Switch>
           </AuthProvider>
         </Router>
