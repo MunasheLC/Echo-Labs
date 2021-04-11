@@ -1,5 +1,25 @@
 import React, { useContext, useState, useEffect} from 'react'
 import { auth } from "../firebase"
+import { db } from "../firebase"
+import "firebase/auth"
+import "firebase/firestore"
+
+function updateUserInfo(){
+    const currentUser = auth.currentUser;
+    if (currentUser){
+
+        const uid = currentUser.uid;
+        const email = currentUser.email;
+        if(uid){
+        const userData = {email, lastLoginTime: new Date()};
+        // console.log(userData.labs);
+            // console.log("uid in authcontext: " + uid);
+            return db.doc(`/users/${uid}`).set(userData, {merge:true});
+        }
+    }
+
+}
+
 
 /* Firebase has some more fleshed out versions of this stuff I'll try add alter*/
 
@@ -28,7 +48,7 @@ export function AuthProvider({ children }) {
 
     // Login Function
     function login(email, password){
-        auth.signInWithEmailAndPassword(email, password)
+        return auth.signInWithEmailAndPassword(email, password)
 
     }
 
@@ -65,12 +85,11 @@ export function AuthProvider({ children }) {
         // Executes the follwoing 
         //ComponentDidMount - Called the first time a comp is mounted
         // ComponentDidupdate - Called when comp is updated ( When a comp gets new props or the state changes)
-        
-        
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        const unsubscribe = auth.onAuthStateChanged(user => {  
             console.log(user)
             setCurrentUser(user)
             setLoading(false)
+            updateUserInfo()
             
         })
 
@@ -89,8 +108,8 @@ export function AuthProvider({ children }) {
         logout,
         resetPassword,
         updateEmail,
-        updatePassword
-    }        
+        updatePassword,
+    }     
     return (
         <AuthContext.Provider value= {value}>
             {/*if not loading don't render children*/}

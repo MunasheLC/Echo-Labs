@@ -30,7 +30,17 @@
   height: 60vh;
   padding-bottom: 30px;
 }
-
+#userinput-container {
+  background: #546077;
+  border-radius: 8px;
+  box-shadow: 6px 6px 20px rgba(122, 122, 122, 0.212);
+  position: fixed;
+  top: 20vh;
+  left: 35%;
+  width: 32vw;
+  height: 60vh;
+  padding-bottom: 30px;
+}
 .items {
   color: #7dcaf7;
   font-size: 1.2rem;

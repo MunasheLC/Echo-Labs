@@ -1,206 +1,173 @@
-import React, { useEffect, useRef } from 'react'
-import io from "socket.io-client"
-import "react-router-dom"
+import React, { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
+import Peer from "simple-peer";
+import styled from "styled-components";
 
-export default function Room() {
+const Container = styled.div`
+    padding: 20px;
+    display: flex;
+    height: 100vh;
+    width: 90%;
+    margin: auto;
+    flex-wrap: wrap;
+`;
 
-    const userVideo = useRef()
-    const partnerVideo = useRef()
-    const peerRef = useRef()
-    const socketRef = useRef()
-    const otherUser = useRef()
-    const userStream= useRef()
+const StyledVideo = styled.video`
+    height: 40%;
+    width: 50%;
+`;
 
+const Video = (props) => {
+    const ref = useRef();
 
-    //Build INVITE
-    function handleNegotiationNeededEvent(userID) {
-
-        peerRef.current.createOffer().then(offer =>{
-            return peerRef.current.setLocalDescription(offer)
-        }).then(() => {
-            const payload = {
-                target: userID,
-                 caller: socketRef.current.id,
-                 sdp: peerRef.current.setLocalDescription
-            }
-            socketRef.current.emit("offer", payload)
-        }).catch(e => console.log(e))
-        
-    }
-
-
-    //Receiving Call Function
-    function handleReceiveCall(incoming) {
-
-        // Create receiving peer
-        peerRef.current = createPeer()
-
-        // Description object conataining the incooming SDP
-        const desc = new RTCSessionDescription(incoming.sdp)
-
-        //Set remote description. SDP of caller
-        peerRef.current.setRemoteDescription(desc).then( () => {
-
-            //Collect Tracks and attache them to the peer
-            userStream.current.getTracks().forEach(track => {
-
-                peerRef.current.addTrack(track, userStream.current)
-
-            }).then( () => {
-
-                //Resolves at the creation of an answer
-                return peerRef.current.createAnswer()
-
-            }).then(answer => {
-                //Some SDP Data 
-                return peerRef.current.setLocalDescription(answer)
-            }).then( () => {
-                const payload = {
-                    targer: incoming.caller,
-                    caller: socketRef.current.id,
-                    sdp: peerRef.current.setLocalDescription
-                }
-                socketRef.current.emit("answer", payload)
-            })
+    useEffect(() => {
+        props.peer.on("stream", stream => {
+            ref.current.srcObject = stream;
         })
-        
-    }
+    }, []);
 
-    //Answer Call Function
-    function handleAnswer(message) {
-        
-        // Create answer sdp
-        const desc = new RTCSessionDescription(message.sdp)
-        peerRef.current.setRemoteDescription(desc).catch(e => console.log(e))
-        
-    }
+    return (
+        <StyledVideo playsInline autoPlay ref={ref} />
+    );
+}
 
-    // ICE candidate communication
 
-    function handleICECandidateEvent(e) {
+const videoConstraints = {
+    height: window.innerHeight / 2,
+    width: window.innerWidth / 2
+};
 
-        //Does event have candidate
-        if (e.candidate){
 
-            // If true create payload with other users information
-            const payload = {
-                target: otherUser.current,
-                candidate: e.candidate
-            }
-            socketRef.current.emit("ice-candidate", payload)
-        }
-        
-    }
 
-    // ICE candidate agreement logic
-    function handleNewICECandidatemsg(incoming) {
 
-        const candidate = new RTCIceCandidate(incoming)
 
-        peerRef.current.addICECandidate(candidate).catch(e => console.log(e))
-        
-    }
 
-    //User video/audio information
-    function handleTrackEvent(e) {
-
-        partnerVideo.current.srcObject = e.streams[0]
-        
-    }
+const Room = (props) => {
+    const [peers, setPeers] = useState([]); //local list of peers for displaying purposes
+    const socketRef = useRef(); //server
+    const userVideo = useRef(); //users video
+    const peersRef = useRef([]); // peer connection
+    const roomID = props.match.params.roomID; //The ID for the room
 
     //Function to create peers
-    function createPeer(userID) {
+    function createPeer(userToSignal, callerID, stream) {
 
-        const peer = new RTCPeerConnection({
+        // Signal that you've joined to the other peers
+        const peer = new Peer({
+            initiator: true,
+            trickle: false,
+            stream,
+        });
 
-            iceServers: [
-                {
-                    urls: "stun:stun.telnyx.com"
-                },
-                {
-                    urls: "turn:turn.telnyx.com?transport=tcp",
-                    credential: "testpassword",
-                    username: "testuser"
+        peer.on("signal", signal => {
 
-                }
-            ]
+            //Collect the singal you're sending to, your own ID and then you stream
+            socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
         })
 
-        peer.onicecandidate = handleICECandidateEvent 
-        peer.ontrack = handleTrackEvent
-        peer.onnegotiationneeded = () => handleNegotiationNeededEvent(userID)
-        
+        return peer;
     }
 
-    //Calls the users - Later change to add multiple users to a room or grant access to a room
-    function callUser(userID) {
 
-        // Builds WebRTC peer object
-        peerRef.current = createPeer(userID)
-
-        // Returns an array of the tracks on a stream (AUdio and Video). 
-        userStream.current.getTracks().forEach(track => {
-
-            // Attach stream to peer so that it can be sent over to other user
-            peerRef.current.addTrack(track, userStream.current)
+    //Takes, the signal from person who just joined the room, 
+    function addPeer(incomingSignal, callerID, stream) {
+        const peer = new Peer({
+            initiator: false,
+            trickle: false,
+            stream,
         })
-        
+
+
+         //When someone wants to connect 
+        peer.on("signal", signal => {
+            socketRef.current.emit("returning signal", { signal, callerID })
+        })
+
+        //Accept the signal
+        peer.signal(incomingSignal);
+
+        return peer;
     }
+
 
     // Runs once, requests acces to user video and audio devices
     useEffect(() => {
+
+         // Conncet to socket server
+        socketRef.current = io.connect("/");
+
         navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true
 
-        // stream contains both audio and video 
-        }).then(stream => {
+             video: videoConstraints, 
+             audio: true 
 
-            //attach stream to userVideo Ref, allows us to display video 
+            // stream contains both audio and video
+            }).then(stream => {
+            
+            //attach stream to userVideo Ref, allows us to display video
             userVideo.current.srcObject = stream;
             
-            //Store stream in userStream
-            userStream.current = stream
+            // Tell Server we're tryna join the room. Emitting event "join room" Check server,js
+            socketRef.current.emit("join room", roomID);
             
-            // Conncet to socket server
-            socketRef.current = io.connect("/")
+             // When second user joins, send the first user their ID
+            socketRef.current.on("all users", users => {
 
-            
+                // Array of peers from server
+                const peers = [];
 
-            // Tell Server we're tryna join the room. Emitting event "join room" Check server,js          
-            socketRef.current.emit("join room", this.props.match.roomID) // pass down the roomID to server
+                //Collect UserID's from the array
+                users.forEach(userID => {
 
+                    //Takes user ID of person we're making a peer for, then our own ID and stream
+                    const peer = createPeer(userID, socketRef.current.id, stream);
 
-            // When second user joins, send the first user their ID
-            socketRef.current.on("other user", userID => {
-                callUser(userID);
-                otherUser.current = userID
+                    //Init the array of peers
+                    peersRef.current.push({
+                        peerID: userID,
+                        peer,
+                    })
+
+                    //Array for rendering purposes
+                    peers.push(peer);
+                })
+
+                setPeers(peers);
             })
-            
-            // From first user perspective, get the ID of the joining user
-            socketRef.current.on("user join", userID => {
-                otherUser.current = userID 
-            })
 
-            // What happens on offer
-            socketRef.current.on("offer", handleReceiveCall)
-            
-            // What happens on answer
-            socketRef.current.on("answer", handleAnswer)
-            
-            //What happens when ICE-Candidate event is called
-            socketRef.current.on('ice-candidate', handleNewICECandidatemsg)
+            //When a user joins add their peer to the peer array
+            socketRef.current.on("user joined", payload => {
+
+                const peer = addPeer(payload.signal, payload.callerID, stream);
+
+                peersRef.current.push({
+                    peerID: payload.callerID,
+                    peer,
+                })
+
+                setPeers(users => [...users, peer]);
+            });
+
+            socketRef.current.on("receiving returned signal", payload => {
+
+                const item = peersRef.current.find(p => p.peerID === payload.id);
+
+                item.peer.signal(payload.signal);
+            });
         })
-        // return () => {
-        //     cleanup
-        //}
+    }, []);
 
-    }, [])
 
     return (
-        <div>
-            <video autoPlay ref={userVideo} />
-            <video autoPlay ref={partnerVideo}/>
-        </div>
-    )
-}
+        <Container>
+            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+            {peers.map((peer, index) => {
+                return (
+                    <Video key={index} peer={peer} />
+                );
+            })}
+        </Container>
+    );
+};
+
+export default Room;
