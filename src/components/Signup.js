@@ -16,7 +16,7 @@ export default function Signup() {
       e.preventDefault()
 
       /*include email verifiactation later*/
-
+      console.log("in signup")
       if (passwordRef.current.value !== PasswordConfirmRef.current.value){
 
           const msg = "Passwords do not match"
@@ -26,15 +26,17 @@ export default function Signup() {
 
       }
       try {
+          console.log("in try")
           setError("")
           setLoading(true)
-        await signup(emailRef.current.value, passwordRef.current.value)
-        history.push("/")
+          await signup(emailRef.current.value, passwordRef.current.value)
+          console.log("in signup");
+          history.push("/login")
       } catch {
           setError("Account Creation Failed")
       }
-
       setLoading(false)
+      console.log("set false");
   }
 
   document.body.style.backgroundColor = "transparent";

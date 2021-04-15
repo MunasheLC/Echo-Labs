@@ -6,9 +6,11 @@ import "firebase/firestore"
 import { auth } from "../firebase"
 import { db } from "../firebase"
 import firebase from 'firebase/app'
+import { addUserToLabList } from './Join'
 
 
 export default function CreateUserLabRoom(){
+
   const [student_password, setStudentPassword] = useState('');
   const [admin_password, setAdminPassword] = useState('');
 
@@ -18,7 +20,7 @@ export default function CreateUserLabRoom(){
     generatePassword();
   }
 
-  async function generatePassword(){
+  async function generatePassword(){ //function creates a random generated password for both the student and the tutor(Admin) in which they can use as keys to join a labroom
     var generator = require('generate-password');
  
     const student_password = generator.generate({
@@ -32,63 +34,45 @@ export default function CreateUserLabRoom(){
     setStudentPassword(student_password);
     setAdminPassword(admin_password);
 
-    checkLabRoomExists(student_password, admin_password);
+    checkLabRoomExists(student_password, admin_password); //once keys have been generated, check if the room already exists
   }
 
   async function checkLabRoomExists(studentpassword, adminpassword){
-    const labroomName= document.getElementById("labroom-name").value;
-    const labcollection = db.collection('labs');
+    const labroomName = document.getElementById("labroom-name").value; //gets the inputted lab room name the user wants to create
+    const labcollection = db.collection('labs'); // gets the labs collection from firestore
     //adds to labs collection
 
     //check if collection contains new lab name
-    const snapshot = await labcollection.where('Lab_Name', '==', labroomName).get();
+    const labCheck = await labcollection.where('Lab_Name', '==', labroomName).get(); //get info if there is a labroom name in labs collection that already exists
     const currentUser = auth.currentUser;
     const email = currentUser.email;
 
-    if (snapshot.empty) {
+    if (labCheck.empty) { //if nothing exists in the labroom collection with that name, add the newly created name to the labs collection
         console.log("collection doesn't contain lab: " + labroomName)
-        db.collection('labs').add({
+        db.collection('labs').add({  //adds the newly created lab to the labs collection in firestore along with specific fields to attach to it.
         Lab_Name: document.getElementById("labroom-name").value,
         Lab_Key_Student: studentpassword,
         Lab_Key_Admin: adminpassword,
         Host_email: email})
-        addHosttoLab(email);
+        addHosttoLab(); //automatically add the lab id and information to the users lab field in their user collection
     }
-    else{
-      console.log("collection contains lab" + labroomName); 
+    else{ //else if firestore already contains that labname:
+      console.log("collection contains lab" + labroomName);  
       //print error alert message saying lab exists try again.
 
     }
 
   }
-  async function addHosttoLab(useremail){ //maybe put this function within addUsertoLab. Dont need 2 seperate?
+  async function addHosttoLab(){ 
     //check if there is  a lab that contains the inputted lab name
     const labroomName= document.getElementById("labroom-name").value;
     const labcollection = db.collection('labs');
-    const snapshot = await labcollection.where('Lab_Name', '==', labroomName).get();
-    if (snapshot){
-      snapshot.forEach(doc =>{
-        // console.log("Adding user to labRoom " + useremail);
-        addUserToLab(useremail, doc.id);
+    const labCheck = await labcollection.where('Lab_Name', '==', labroomName).get();
+    if (labCheck){
+      labCheck.forEach(doc =>{
+        addUserToLabList(doc.id); 
       });
     }
-  }
-  
-  async function addUserToLab(useremail, newLabId){
-    const usercollection = db.collection('users');
-    const snapshot = await usercollection.where('email', '==', useremail).get();
-  
-    if (snapshot.empty) {
-        console.log('No email found within user collection');
-        return;
-    } 
-  
-    snapshot.forEach(doc =>{
-        const userDoc = db.collection('users').doc(doc.id);
-        userDoc.update({
-            labs: firebase.firestore.FieldValue.arrayUnion(newLabId)
-        })
-    });
   }
 
   return(

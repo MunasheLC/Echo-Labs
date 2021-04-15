@@ -66,6 +66,7 @@ io.on('connection', socket => {
 
 
         // Initiate call towards target through event "offer" containing payload (Caller info and offer object)
+<<<<<<< HEAD
         io.to(payload.userToSignal).emit("user-joined", { 
 
             signal: payload.signal,
@@ -100,3 +101,21 @@ io.on('connection', socket => {
 });
 
 server.listen(8000, () => console.log('server is running on port 8000'));
+=======
+        io.to(payload.target).emit("offer", payload)
+    })
+
+    // Answer event
+    socket.on("answer", payload => {
+        // When answered send info back to originator 
+        io.to(payoload.target).emit("answer", payload)
+    })
+
+    // Event to have partcipants agree on a connection 
+    socket.on("ice-candidate", incoming => {
+        io.to(incoming.target.emit("ice-candidate", incoming.candidate))
+    })
+})
+
+server.listen(8000, () => console.log("Server is running on port 8000")) 
+>>>>>>> d2d6dd2ab919bfb64383a871a873d2d4f9ea381b

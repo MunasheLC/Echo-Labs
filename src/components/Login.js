@@ -1,22 +1,22 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { useHistory, Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import './Login.css';
 
 
 export default function Login() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login } = useAuth();
-  const [error, setError] = useState("");
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const { login } = useAuth()
+  const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
-  async function signupHandler(e) {
-    e.preventDefault();
-
+  async function loginHandler(e) {
+    e.preventDefault()
     try {
+<<<<<<< HEAD
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value)
@@ -26,8 +26,17 @@ export default function Login() {
     }
 
     setLoading(false);
+=======
+      setError("")
+      setLoading(true)
+    await login(emailRef.current.value, passwordRef.current.value)
+    history.push('/dashboard')
+  } catch {
+      setError("Login Failed")
+>>>>>>> d2d6dd2ab919bfb64383a871a873d2d4f9ea381b
   }
-
+  setLoading(false)
+}
 
   document.body.style.backgroundColor = "transparent";
   document.body.style.background="linear-gradient(120deg, rgba(0, 0, 0, 0) 30%, #7845d9 40%),url('https://www.toptal.com/designers/subtlepatterns/patterns/double-bubble-dark.png')";
@@ -35,10 +44,10 @@ export default function Login() {
   return (
     <>
 
-      <div className='logo' style={{position:"fixed", marginTop:"20vh", marginLeft:"8vw",padding: "10vh",maxWidth:"25vw", float:"left", color:"white"}}>
+      <div className='logo' style={{}}>
           <div className="logo-name">
 
-            <div className="echo-lines" style={{float: "right"}}>
+            <div className="echo-lines" style={{}}>
               <div id="x" className="animate__animated animate__bounceInDown"></div>
               <div id="y" className="animate__animated animate__bounceInDown animate__delay-1s"></div>
               <div id="z" className="animate__animated animate__bounceInDown animate__delay-2s"></div>
@@ -62,7 +71,7 @@ export default function Login() {
               {error}{" "}
             </Alert>
           )}
-          <Form onSubmit={signupHandler}>
+          <Form onSubmit={loginHandler}>
             <Form.Group id="email">
               <Form.Label className="head" style={{}}>Email</Form.Label>
               <Form.Control style={{ background: "#212121 ", color:"white", padding:"20px"}} type="email" ref={emailRef} required />

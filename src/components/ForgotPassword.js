@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 
 
 
-export default function Signup() {
+export default function ForgotPassword() {
     const emailRef = useRef()
     // const passwordRef = useRef()
     // const PasswordConfirmRef = useRef()
@@ -81,7 +81,7 @@ export default function Signup() {
             </Form>
 
             <div className = "w-100 text-center mt-2" style={{color:"white"}}>
-                Back to <Link className="items" to="/login"> Log in? </Link>
+                Back to <Link className="items" to="/"> Log in? </Link>
             </div>
             </Card.Body>
         </Card>

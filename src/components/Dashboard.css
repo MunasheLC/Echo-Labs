@@ -13,6 +13,19 @@
   width: 3px;
   height: 30px;
 }
+video#userVid {
+  position: relative;
+  top: 2vh;
+  height: 40vh;
+  left: 60vw;
+}
+
+video#partnerVid {
+  position: relative;
+  height: 40vh;
+  left: 60vw;
+  top: 2vh;
+}
 #dash-z {
   float: left;
   margin-right: 8px;
@@ -64,7 +77,41 @@
   justify-content: space-evenly;
   flex-flow: wrap;
   align-items: flex-start;
+  height: 63vh;
 }
+.lab-row {
+  overflow-y: scroll;
+}
+.lab-row::-webkit-scrollbar {
+  width: 10px;
+}
+.lab-row::-webkit-scrollbar-track {
+  background: #1f2647;
+}
+.lab-row::-webkit-scrollbar-thumb {
+  background: rgb(104, 255, 255);
+}
+
+#dash-container {
+  border-radius: 8px;
+  width: 65vw;
+  max-width: 80vw;
+  height: 80vh;
+  background-color: #383f75;
+  position: relative;
+  top: 10vh;
+  left: 24%;
+  box-shadow: 15px -10px 10px -6px #00ffef;
+}
+#userType {
+  position: relative;
+  top: -3vh;
+}
+#logoutButton {
+  position: relative;
+  top: 30vh;
+}
+
 .dash-cards-h2 {
   color: white;
   text-align: center;
@@ -86,7 +133,7 @@
 #type-line {
   position: relative;
   top: 10%;
-  left: 26.5vw;
+  left: 24.5vw;
   border-right: 2px solid rgba(255, 255, 255, 0.75);
   font-size: 1.2rem;
   text-align: center;
@@ -118,7 +165,6 @@
 .Button-text {
   color: white;
   text-decoration: none;
-  margin-top: 30vh;
   font-size: 1.3rem;
 }
 
@@ -149,6 +195,42 @@
   width: 100%;
   text-align: center;
 }
+
+@media screen and (min-width: 2560px) {
+  .dash-echo-lines {
+    margin-left: 38%;
+  }
+  .circle {
+    top: 6vh;
+  }
+  #dash-container {
+    top: 8vh;
+    left: 45%;
+  }
+  #dash-card-container {
+    left: 50vh;
+  }
+  .dash-cards-h2 {
+    font-size: 1.5rem;
+  }
+  #type-line {
+    font-size: 2.35rem;
+    left: 23vw;
+  }
+  #userType {
+    position: relative;
+    top: -10vh;
+  }
+  #logoutButton {
+    position: relative;
+    top: 30vh;
+  }
+  .Button-text {
+    margin: 0vh;
+    font-size: 2.5rem;
+  }
+}
+
 @media screen and (max-width: 1024px) {
   .dash-echo-lines {
     margin-left: 38%;
@@ -162,14 +244,30 @@
   .dash-cards-h2 {
     font-size: 1.5rem;
   }
+  #type-line {
+    font-size: 1rem;
+    left: 20vw;
+  }
 }
 @media screen and (max-width: 770px) {
   .dash-echo-lines {
-    margin-left: 48%;
+    margin-left: 36%;
   }
   .circle {
     top: 6vh;
+    width: 80px;
+    height: 80px;
   }
+  .fas.fa-user-secret {
+    font-size: 3.5rem;
+    width: 100%;
+    text-align: center;
+  }
+  #type-line {
+    font-size: 0.95rem;
+    left: 14.5vw;
+  }
+
   #dash-card-container {
     left: 30vh;
   }
@@ -203,7 +301,7 @@
   }
 
   .Button-text {
-    margin-top: 35vh;
+    margin: 1vh;
     font-size: 2.5rem;
   }
   .Button-text-1 {
