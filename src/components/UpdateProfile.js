@@ -41,7 +41,7 @@ export default function UpdateProfile() {
     //runs after collecting all promises
     Promise.all(promises).then(() => {
 
-        history.push("/")
+        history.push("/dashboard")
      }).catch(() => {
          setError("Failed to update account")
      }).finally(() => {
@@ -92,7 +92,7 @@ export default function UpdateProfile() {
 
           </Form>
           <div className="w-100 text-center mt-2">
-            <Link to="/" style={{ color: "white" }}> Back to Dashboard </Link>
+            <Link to="/dashboard" style={{ color: "white" }}> Back to Dashboard </Link>
           </div>
 
         </Card.Body>

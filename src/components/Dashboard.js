@@ -4,9 +4,11 @@ import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import { Card } from 'react-bootstrap';
 import {auth} from '../firebase';
+import { getUserPermissions} from './Admin'
 import './Dashboard.css'
 
 export default function Dashboard() {
+
 	const [error, setError] = useState("")
 	const { currentUser, logout } = useAuth()
 	const history = useHistory()
@@ -23,12 +25,16 @@ export default function Dashboard() {
 		}
 
 	}
-  document.body.style.background="#1c1f3e";
+  	document.body.style.background="#1c1f3e";
+
+	function adminCheck(){
+		getUserPermissions().then((value) => { if (value === true){ document.getElementById('permission').innerHTML = "Admin"; } // if the promise results to true , display Admin on their dashboard
+	})}
+
 	return (
 		<>
-			<div id="dash-container" className="animate__animated animate__bounceInRight" style={{borderRadius:"8px",width:"65vw", maxWidth:"80vw" ,height:"80vh",backgroundColor:"#383f75", position:"relative", top:"10vh", left:"24%",boxShadow:"15px -10px 10px -6px #00FFEF"}}>
+			<div id="dash-container" className="animate__animated animate__bounceInRight" style={{}}>
 				<div className="dash-nav" style={{position:"relative", left: "20px",width:"20vw", height: "100%",backgroundColor:"#2a315d"}}>
-
 					<div className="dash-logo" style={{ position:"relative", top:"5vh",width:"10vw", height:"30vh" ,margin:"0 auto", color:"white"}}>
 						
 						<div className= "dash-echo-lines">
@@ -41,9 +47,12 @@ export default function Dashboard() {
 							<i className="fas fa-user-secret fa-3x center"></i>
 						</div>
 					</div>
-			
-					<div className="w-100 text-center mt-2">
-						<Button variant="link" onClick={handleLogout}>
+
+					<div id="userType" className="w-100 text-center mt-2"><h2 id="permission" className="Button-text">Student</h2></div>
+					{adminCheck()}
+					
+					<div id="logoutButton" className="w-100 text-center mt-2">
+						<Button variant="info" onClick={handleLogout}>
 							<h2 className="Button-text"> Logout</h2>
 						</Button>
 					</div>

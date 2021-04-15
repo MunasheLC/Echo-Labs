@@ -3,6 +3,18 @@
   font-size: 5.5rem;
 }
 
+.echo-lines {
+  float: right;
+}
+.logo {
+  position: fixed;
+  margin-top: 20vh;
+  margin-left: 8vw;
+  padding: 10vh;
+  max-width: 25vw;
+  float: left;
+  color: white;
+}
 .animate__animated.animate__jackInTheBox {
   text-align: right;
   line-height: 10%;
@@ -79,6 +91,66 @@
     top: 7vh;
   }
 } */
+/* @media only screen and (max-width: 430px) {
+  #login-container {
+    background: #36393f;
+    border-radius: 0px;
+    box-shadow: 6px 6px 20px rgba(122, 122, 122, 0.212);
+    position: fixed;
+    top: 65vh;
+    right: 0vw;
+    width: 100vw;
+    height: 60vh;
+    padding-bottom: 30px;
+  }
+  .logo {
+    position: fixed;
+    margin-top: 15vh;
+    margin-left: 20vw;
+    padding: 10vh;
+    max-width: 25vw;
+    float: left;
+    color: white;
+  }
+
+  .animate__animated.animate__bounceInLeft {
+    font-size: 5.5rem;
+  }
+  .animate__animated.animate__jackInTheBox {
+    font-size: 3.5rem;
+    margin-left: 17.5vw;
+    line-height: 32%;
+  }
+
+  .title {
+    font-size: 1rem;
+    line-height: 20px;
+  }
+
+  .animate__animated.animate__bounceInRight {
+    top: 23vh;
+    max-width: 100vw;
+    height: 45vh;
+  }
+
+  .items {
+    font-size: 1.8rem;
+  }
+
+  .echo-lines {
+    position: relative;
+    width: 30vw;
+    left: 60vw;
+    top: -3vh;
+  }
+  #x,
+  #y,
+  #z {
+    width: 3px;
+    height: 35px;
+  }
+} */
+
 @media only screen and (min-width: 160em) {
   .animate__animated.animate__bounceInLeft {
     font-size: 8.5rem;
@@ -107,6 +179,6 @@
   #y,
   #z {
     width: 5px;
-    height: 35px;
+    height: 45px;
   }
 }

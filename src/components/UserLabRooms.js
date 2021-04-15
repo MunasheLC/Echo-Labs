@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Button} from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
-import LabRoom from"./getUserLabRooms"
+import LabRoom from "./getUserLabRooms"
+import { getUserPermissions } from './Admin'
 import './Dashboard.css'
 
 export default function UserLabRooms() {
@@ -22,11 +23,15 @@ export default function UserLabRooms() {
 
 		}
 	}
-
 	document.body.style.backgroundColor="#1c1f3e";
+
+	function adminCheck(){
+		getUserPermissions().then((value) => { if (value === true){ document.getElementById('perm').style.display = 'block'; } // if the promise results to true show the user the createLabRoom option in navbar
+	})
+}
 	return(
 		<>
-			<div id="dash-container" className="animate__animated animate__bounceInRight" style={{borderRadius:"8px",width:"65vw", maxWidth:"80vw" ,height:"80vh",backgroundColor:"#383f75", position:"relative", top:"10vh", left:"25%",boxShadow:"15px -10px 10px -6px #00FFEF"}}>
+			<div id="dash-container" className="animate__animated animate__bounceInRight" style={{}}>  
 				<div className="dash-nav" style={{position:"relative", left: "20px",width:"20vw", height: "100%",backgroundColor:"#2a315d"}}>
 					<div className="dash-logo" style={{ position:"relative", top:"5vh",width:"10vw", height:"30vh" ,margin:"0 auto", color:"white"}}>
 
@@ -50,13 +55,10 @@ export default function UserLabRooms() {
 								</Button>
 							</Link>
 
-							<Link to='CreateLabRoom' style={{}}>
-								<Button variant="link">
-								<h2 className="Button-text-1"> Create Lab Room </h2>
-								</Button>
-							</Link>
+							<Link id="perm" to='CreateLabRoom' style={{display: "none"}}><Button variant="link"><h2 className="Button-text-1"> Create Lab Room </h2></Button></Link>
+							{adminCheck()}
 
-							<Button variant="link" onClick={handleLogout}>
+							<Button variant="info" onClick={handleLogout}>
 							<h2 className="Button-text-1"> Logout</h2>
 							</Button>
 						</ul>

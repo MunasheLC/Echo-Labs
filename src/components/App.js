@@ -4,8 +4,8 @@ import {Container} from 'react-bootstrap'
 import './App.css'
 import { AuthProvider } from '../contexts/AuthContext'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
-import Dashboard from "./Dashboard"
 import Login from "./Login"
+import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
 import PrivateRoute from "./PrivateRoute"
 import UpdateProfile from "./UpdateProfile"
@@ -22,12 +22,12 @@ function App() {
           <AuthProvider>
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard}/>
-              <PrivateRoute path="/update-profile" component={UpdateProfile}/>
-              <PrivateRoute path="/user-lab-rooms" component={UserLabRooms}/>
-              <PrivateRoute path="/createLabRoom" component={CreateLabRoom}/>
-              <PrivateRoute path="/join" component={join}/>
+              <PrivateRoute exact path="/update-profile" component={UpdateProfile}/>
+              <PrivateRoute exact path="/user-lab-rooms" component={UserLabRooms}/>
+              <PrivateRoute exact path="/createLabRoom" component={CreateLabRoom}/>
+              <PrivateRoute exact path="/join" component={join}/>
               <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
+              <Route path="/login" component={Login} /> 
               <Route path="/forgot-password" component={ForgotPassword} />
               <Route path="/create-room" component={createRoom}/>
               <Route path="/room/:roomID" component={Room}/>
