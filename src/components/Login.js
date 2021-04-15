@@ -16,24 +16,12 @@ export default function Login() {
   async function loginHandler(e) {
     e.preventDefault()
     try {
-<<<<<<< HEAD
-      setError("");
-      setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value)
-      history.push("/")
-    } catch {
-      setError("Login Failed");
-    }
-
-    setLoading(false);
-=======
       setError("")
       setLoading(true)
     await login(emailRef.current.value, passwordRef.current.value)
     history.push('/dashboard')
   } catch {
       setError("Login Failed")
->>>>>>> d2d6dd2ab919bfb64383a871a873d2d4f9ea381b
   }
   setLoading(false)
 }

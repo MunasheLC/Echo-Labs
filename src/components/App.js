@@ -21,21 +21,13 @@ function App() {
         <Router>
           <AuthProvider>
             <Switch>
-<<<<<<< HEAD
-              <PrivateRoute exact path="/" component={Dashboard}/>
-              <PrivateRoute path="/update-profile" component={UpdateProfile}/>
-              <PrivateRoute path="/user-lab-rooms" component={UserLabRooms}/>
-              <PrivateRoute path="/createLabRoom" component={CreateLabRoom}/>
-              <PrivateRoute path="/join" component={join}/>
               <PrivateRoute path="/create-room" component={createRoom}/>
               <PrivateRoute path="/room/:roomID" component={Room}/>
-=======
               <PrivateRoute exact path="/dashboard" component={Dashboard}/>
               <PrivateRoute exact path="/update-profile" component={UpdateProfile}/>
               <PrivateRoute exact path="/user-lab-rooms" component={UserLabRooms}/>
               <PrivateRoute exact path="/createLabRoom" component={CreateLabRoom}/>
               <PrivateRoute exact path="/join" component={join}/>
->>>>>>> d2d6dd2ab919bfb64383a871a873d2d4f9ea381b
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} /> 
               <Route path="/forgot-password" component={ForgotPassword} />
