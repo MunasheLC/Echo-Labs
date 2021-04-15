@@ -16,9 +16,10 @@ const socketToRoom = {};
 io.on('connection', socket => {
 
     //Attaching event listener to socket called "Join room". Used on the client side
-    socket.on("join room", roomID => {
+    socket.on("join-room", roomID => {
 
         console.log("join succesful")
+        
 
         //Amount of users in the room, max is 4 right now, maybe change later 
         if (users[roomID]) {
@@ -44,10 +45,11 @@ io.on('connection', socket => {
 
 
         socketToRoom[socket.id] = roomID;
+        
+        //List of users in the lab room excluding current user -> identified by socketID
+        const usersInThisLab = users[roomID].filter(id => id !== socket.id);
 
-        const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
-
-        socket.emit("all users", usersInThisRoom);
+        socket.emit("user-connection", usersInThisLab);
 
         // if (otherUser) {
 
@@ -60,11 +62,11 @@ io.on('connection', socket => {
 
 
     //Essentially the call event 
-    socket.on("sending signal", payload => {
+    socket.on("send-signal", payload => {
 
 
         // Initiate call towards target through event "offer" containing payload (Caller info and offer object)
-        io.to(payload.userToSignal).emit('user joined', { 
+        io.to(payload.userToSignal).emit("user-joined", { 
 
             signal: payload.signal,
             callerID: payload.callerID 
@@ -73,9 +75,9 @@ io.on('connection', socket => {
     });
 
     //Answer Event
-    socket.on("returning signal", payload => {
+    socket.on("returning-signal", payload => {
 
-        io.to(payload.callerID).emit('receiving returned signal', {
+        io.to(payload.callerID).emit("signal-return", {
 
              signal: payload.signal,
              id: socket.id });
@@ -83,7 +85,7 @@ io.on('connection', socket => {
     });
 
     //Handling user disconncetion
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
 
         const roomID = socketToRoom[socket.id];
 

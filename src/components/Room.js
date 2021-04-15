@@ -2,19 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
+import "./Room.css"
 
+
+// Styled component acts as as container
 const Container = styled.div`
-    padding: 20px;
-    display: flex;
     height: 100vh;
-    width: 90%;
-    margin: auto;
-    flex-wrap: wrap;
+    display: flex;
 `;
 
 const StyledVideo = styled.video`
-    height: 40%;
-    width: 50%;
+     height: 400px;
+     width: 300px;
+     padding: 10px;
+
 `;
 
 const Video = (props) => {
@@ -46,6 +47,7 @@ const Room = (props) => {
     const [peers, setPeers] = useState([]); //local list of peers for displaying purposes
     const socketRef = useRef(); //server
     const userVideo = useRef(); //users video
+    const userTracks = useRef();// Track ref for mute/unmute functions
     const peersRef = useRef([]); // peer connection
     const roomID = props.match.params.roomID; //The ID for the room
 
@@ -62,7 +64,12 @@ const Room = (props) => {
         peer.on("signal", signal => {
 
             //Collect the singal you're sending to, your own ID and then you stream
-            socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
+            socketRef.current.emit("send-signal", { 
+                userToSignal, 
+                callerID, 
+                signal 
+            
+            })
         })
 
         return peer;
@@ -80,7 +87,11 @@ const Room = (props) => {
 
          //When someone wants to connect 
         peer.on("signal", signal => {
-            socketRef.current.emit("returning signal", { signal, callerID })
+            socketRef.current.emit("returning-signal", { 
+                
+                signal, 
+                callerID 
+            })
         })
 
         //Accept the signal
@@ -88,6 +99,50 @@ const Room = (props) => {
 
         return peer;
     }
+
+    //Function to mute the audio you're sending 
+    function muteAudio(){
+        
+        const audioStatus = userTracks.current.getAudioTracks()[0].enabled
+        
+        if (audioStatus){
+
+            userTracks.current.getAudioTracks()[0].enabled = false
+
+            console.log("Audio muted")
+                
+            //function to update button
+        }
+        else{
+            
+            userTracks.current.getAudioTracks()[0].enabled = true
+            console.log("Audio on")
+        }
+
+    }
+
+    //Function to stop video display
+    function stopVideo(){
+        
+        const audioStatus = userTracks.current.getVideoTracks()[0].enabled
+        
+        if (audioStatus){
+
+            userTracks.current.getVideoTracks()[0].enabled = false
+
+            console.log("Video off")
+                
+            //function to update button
+        }
+        else{
+            
+            userTracks.current.getVideoTracks()[0].enabled = true
+            console.log("Video on")
+        }
+        
+    }
+
+
 
 
     // Runs once, requests acces to user video and audio devices
@@ -106,12 +161,15 @@ const Room = (props) => {
             
             //attach stream to userVideo Ref, allows us to display video
             userVideo.current.srcObject = stream;
+            userTracks.current = stream
+            
+            console.log("The stream object", userVideo)
             
             // Tell Server we're tryna join the room. Emitting event "join room" Check server,js
-            socketRef.current.emit("join room", roomID);
+            socketRef.current.emit("join-room", roomID);
             
              // When second user joins, send the first user their ID
-            socketRef.current.on("all users", users => {
+            socketRef.current.on("user-connection", users => {
 
                 // Array of peers from server
                 const peers = [];
@@ -136,7 +194,7 @@ const Room = (props) => {
             })
 
             //When a user joins add their peer to the peer array
-            socketRef.current.on("user joined", payload => {
+            socketRef.current.on("user-joined", payload => {
 
                 const peer = addPeer(payload.signal, payload.callerID, stream);
 
@@ -148,7 +206,7 @@ const Room = (props) => {
                 setPeers(users => [...users, peer]);
             });
 
-            socketRef.current.on("receiving returned signal", payload => {
+            socketRef.current.on("signal-return", payload => {
 
                 const item = peersRef.current.find(p => p.peerID === payload.id);
 
@@ -159,14 +217,45 @@ const Room = (props) => {
 
 
     return (
-        <Container>
-            <StyledVideo muted ref={userVideo} autoPlay playsInline />
-            {peers.map((peer, index) => {
-                return (
-                    <Video key={index} peer={peer} />
-                );
-            })}
-        </Container>
+        
+        <div id="room-container">
+            <div id="video-grid">
+                
+                <StyledVideo muted ref={userVideo} autoPlay playsInline />
+                {peers.map((peer, index) => {
+                    return (
+                        <Video key={index} peer={peer} />
+                    );
+                })}
+
+
+<               div class="controls">
+                    <div class="control-block">
+                        <div class="media-controls">
+                            <button onClick={muteAudio}>Mute</button>
+                        </div>
+
+                        <div onClick={stopVideo}class="media-controls">
+                            <button>Camera</button>
+                        </div>
+
+                        <div class="media-controls">
+                            <button>Leave</button>
+                        </div>
+
+                    </div>
+            </div >
+            </div>
+            
+
+         
+            
+            <div class="center-codeEditor">
+                    code editor here
+                    {/* More on this later */}
+            </div>
+        </div>
+        
     );
 };
 

@@ -26,11 +26,11 @@ function App() {
               <PrivateRoute path="/user-lab-rooms" component={UserLabRooms}/>
               <PrivateRoute path="/createLabRoom" component={CreateLabRoom}/>
               <PrivateRoute path="/join" component={join}/>
+              <PrivateRoute path="/create-room" component={createRoom}/>
+              <PrivateRoute path="/room/:roomID" component={Room}/>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <Route path="/forgot-password" component={ForgotPassword} />
-              <Route path="/create-room" component={createRoom}/>
-              <Route path="/room/:roomID" component={Room}/>
             </Switch>
           </AuthProvider>
         </Router>
