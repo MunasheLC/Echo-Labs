@@ -1,0 +1,6 @@
+{
+  "rules": {
+    ".read": "now < 1623314603",  // 2021-6-10 - this is UNIX timestamp.
+    ".write": "now < 1623314603",  // 2021-6-10
+  }
+}
