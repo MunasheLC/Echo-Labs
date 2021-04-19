@@ -7,6 +7,7 @@ import { auth } from "../firebase"
 import { db } from "../firebase"
 import firebase from 'firebase/app'
 import { addUserToLabList } from './Join'
+import { v4 as uuid } from "uuid"
 
 
 export default function CreateUserLabRoom(){
@@ -46,6 +47,7 @@ export default function CreateUserLabRoom(){
     const labCheck = await labcollection.where('Lab_Name', '==', labroomName).get(); //get info if there is a labroom name in labs collection that already exists
     const currentUser = auth.currentUser;
     const email = currentUser.email;
+    const uid = uuid();
 
     if (labCheck.empty) { //if nothing exists in the labroom collection with that name, add the newly created name to the labs collection
         console.log("collection doesn't contain lab: " + labroomName)
@@ -53,13 +55,13 @@ export default function CreateUserLabRoom(){
         Lab_Name: document.getElementById("labroom-name").value,
         Lab_Key_Student: studentpassword,
         Lab_Key_Admin: adminpassword,
+        RoomID: uid,
         Host_email: email})
         addHosttoLab(); //automatically add the lab id and information to the users lab field in their user collection
     }
     else{ //else if firestore already contains that labname:
       console.log("collection contains lab" + labroomName);  
       //print error alert message saying lab exists try again.
-
     }
 
   }

@@ -18,8 +18,6 @@ export default function ForgotPassword() {
    async function resetHandler (e) {
         e.preventDefault()
 
-        
-
         try {
             setMessage("")
             setError("")
