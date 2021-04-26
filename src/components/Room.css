@@ -31,3 +31,25 @@
   cursor: pointer;
   justify-content: space-between;
 }
+
+/* .center-codeEditor{
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  left: 10vw;
+  
+
+} */
+
+.main-console {
+
+  background-color: #fff;
+  width: 100%;
+  height: 130px;
+  margin-top: .9em;
+  border: 1px solid var(--editor-border);
+  overflow: auto;
+
+}
+

@@ -1,0 +1,9 @@
+.editor-container{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 10vw;
+    
+  
+  }

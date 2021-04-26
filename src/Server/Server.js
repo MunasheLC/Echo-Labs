@@ -9,6 +9,9 @@ const io = socket(server);
 //Collection of rooms
 const users = {};
 
+const codeStore = ""
+
+
 //Collection of users -> This can probably be connected with the DB
 const socketToRoom = {};
 
@@ -95,7 +98,24 @@ io.on('connection', socket => {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
+        socket.broadcast.emit("user-leaves",  socket.id)
+        console.log("User left successfully")
     });
+
+    // socket.on("receive-code", code => {
+        
+    //     code = codeStore
+        
+
+    // }) 
+    socket.on("update-code", code => {
+        
+        console.log(code)
+     
+        socket.broadcast.emit("receive-update-code", code)
+
+
+    }) 
 
 });
 

@@ -3,6 +3,8 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import "./Room.css"
+import Editor from "./Editor"
+import { edit } from "ace-builds";
 
 
 // Styled component acts as as container
@@ -50,6 +52,10 @@ const Room = (props) => {
     const userTracks = useRef();// Track ref for mute/unmute functions
     const peersRef = useRef([]); // peer connection
     const roomID = props.match.params.roomID; //The ID for the room
+    const [editorCode, setEditorCode] = useState("")
+    const [peerCode, setPeerCode] = useState("")
+    const codeRef = useRef()
+
 
     //Function to create peers
     function createPeer(userToSignal, callerID, stream) {
@@ -74,6 +80,8 @@ const Room = (props) => {
 
         return peer;
     }
+
+    
 
 
     //Takes, the signal from person who just joined the room, 
@@ -143,7 +151,7 @@ const Room = (props) => {
     }
 
 
-
+    
 
     // Runs once, requests acces to user video and audio devices
     useEffect(() => {
@@ -186,11 +194,19 @@ const Room = (props) => {
                         peer,
                     })
 
+                    //Init the local array of peers with the ID's 
+                    peers.push({
+
+                        peerID: userID,
+                        peer
+                    })
+
                     //Array for rendering purposes
-                    peers.push(peer);
+                    // peers.push(peer);
                 })
 
                 setPeers(peers);
+                console.log("The peers", peers)
             })
 
             //When a user joins add their peer to the peer array
@@ -203,7 +219,12 @@ const Room = (props) => {
                     peer,
                 })
 
-                setPeers(users => [...users, peer]);
+                const peerObject = {
+                    peer,
+                    peerID: payload.callerID
+                }
+
+                setPeers(users => [...users, peerObject]);
             });
 
             socketRef.current.on("signal-return", payload => {
@@ -212,8 +233,54 @@ const Room = (props) => {
 
                 item.peer.signal(payload.signal);
             });
+
+
+            //Find peer of leaving user and remove them from the call
+            socketRef.current.on("user-leaves", id => {
+
+                const peerObject = peersRef.current.find(p => p.peerID === id)
+
+                if (peerObject) {
+
+                    peerObject.peer.destroy()
+
+                }
+
+                const peers = peersRef.current.filter(p => p.peerID !== id)
+                peersRef.current = peers
+                setPeers(peers)
+            })
+
+            
+
         })
     }, []);
+
+    //Real time code updates
+
+    useEffect(() => {
+        socketRef.current.emit("update-code", editorCode)
+        
+        
+        //Receive code from peers and set it to the current code
+        socketRef.current.on("receive-update-code", code => {
+           
+            //use setcode instead maybe
+            console.log("room receives code", code)
+            // codeRef.current = code
+            // setPeerCode(code)
+            setEditorCode(code) 
+
+            console.log("UPDATE EDITOR CODE FROM SERVER: ", editorCode)
+            
+            // console.log("PEER CODE RECEIVED", peerCode)
+
+            
+        })
+     
+    },)
+
+
 
 
     return (
@@ -224,7 +291,7 @@ const Room = (props) => {
                 <StyledVideo muted ref={userVideo} autoPlay playsInline />
                 {peers.map((peer, index) => {
                     return (
-                        <Video key={index} peer={peer} />
+                        <Video key={peer.peerID} peer={peer.peer} />
                     );
                 })}
 
@@ -248,12 +315,30 @@ const Room = (props) => {
             </div>
             
 
-         
+             
             
             <div class="center-codeEditor">
-                    code editor here
-                    {/* More on this later */}
+  
+            {/* Editor Config */}
+            <Editor 
+            
+            language="javascript"
+            
+
+            theme="monokai"
+
+            displayName="Echo labs Editor" 
+
+            updateCode={editorCode} 
+            
+            onChange={setEditorCode} 
+            />
+           
+       
+                
             </div>
+
+            
         </div>
         
     );
