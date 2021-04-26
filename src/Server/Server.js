@@ -111,7 +111,8 @@ io.on('connection', socket => {
     socket.on("update-code", code => {
         
         console.log(code)
-     
+        
+        //check to make sure that the code is not the same before sending it to the other peers
         socket.broadcast.emit("receive-update-code", code)
 
 
