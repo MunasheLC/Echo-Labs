@@ -48,12 +48,11 @@ const Room = (props) => {
   const userTracks = useRef(); // Track ref for mute/unmute functions
   const peersRef = useRef([]); // peer connection
   const roomID = props.match.params.roomID; //The ID for the room
-  const [editorCode, setEditorCode] = useState("");
-  const [peerCode, setPeerCode] = useState("");
-  const codeRef = useState("");
-  const [peerFlag, setPeerFlag] = useState(false);
-  const echoEditor = useRef(null);
-  // console.log("Echo", echoEditor)
+  const [editorCode, setEditorCode] = useState(""); //stores value of the editor for sending to server
+  const codeRef = useState(""); //This ref syncs the editor to the onChange function -> basically just a store for the code too
+  const [peerFlag, setPeerFlag] = useState(false); //This flag is necessary to handle updates between the server and the current user so that received update aren't automatically sent -> this behavior results in a loop 
+  const echoEditor = useRef(null); // Ref is used to get access to the aceEditor functions -> used to update the value of the editor
+
 
   //Function to create peers
   function createPeer(userToSignal, callerID, stream) {
