@@ -9,7 +9,7 @@ const io = socket(server);
 //Collection of rooms
 const users = {};
 
-const codeStore = ""
+let codeStore = ""
 
 
 //Collection of users -> This can probably be connected with the DB
@@ -18,7 +18,7 @@ const socketToRoom = {};
 // Event to check if a person connects to socket server. "Socket" is the socket object for one person
 io.on('connection', socket => {
 
-    //Attaching event listener to socket called "Join room". Used on the client side
+    //Attaching event listener to socket event called "Join room". Used on the client side
     socket.on("join-room", roomID => {
 
         console.log("join succesful")
@@ -109,12 +109,26 @@ io.on('connection', socket => {
 
     // }) 
     socket.on("update-code", code => {
-        
-        console.log(code)
-        
-        //check to make sure that the code is not the same before sending it to the other peers
-        socket.broadcast.emit("receive-update-code", code)
 
+        const roomID = socketToRoom[socket.id]
+        
+        
+        // console.log(code)
+        // socket.broadcast.emit("receive-update-code", code)
+        
+        // SEND CODE TO EVERYONE EXCEPT MYSELF
+        if(code != codeStore){
+
+            codeStore = code
+
+            console.log(codeStore)
+            //checher peek to make sure that the code is not the same before sending it to the otrs
+        socket.broadcast.emit("receive-update-code", codeStore)
+
+        }
+        
+        
+        
 
     }) 
 
