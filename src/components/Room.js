@@ -3,8 +3,7 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import "./Room.css";
-// import Editor, { echoEditor } from "./Editor"
-// import { edit } from "ace-builds";
+import { Link, useHistory } from "react-router-dom"
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-javascript";
@@ -52,7 +51,7 @@ const Room = (props) => {
   const codeRef = useState(""); //This ref syncs the editor to the onChange function -> basically just a store for the code too
   const [peerFlag, setPeerFlag] = useState(false); //This flag is necessary to handle updates between the server and the current user so that received update aren't automatically sent -> this behavior results in a loop 
   const echoEditor = useRef(null); // Ref is used to get access to the aceEditor functions -> used to update the value of the editor
-
+  const history = useHistory()
 
   //Function to create peers
   function createPeer(userToSignal, callerID, stream) {
@@ -127,6 +126,16 @@ const Room = (props) => {
       userTracks.current.getVideoTracks()[0].enabled = true;
       console.log("Video on");
     }
+  }
+
+  //Leave button function
+  function handleLeave(){
+
+    userTracks.current.getTracks().forEach(track => track.stop());
+    socketRef.current.disconnect()
+    history.push("/dashboard")
+    
+
   }
 
   // Runs once, requests acces to user video and audio devices
@@ -254,6 +263,15 @@ const Room = (props) => {
 
   }, [editorCode]); //Remove []
 
+  //MDisconnects when user changes the URL
+  useEffect(() => {
+
+    return history.listen((location) => { 
+       userTracks.current.getTracks().forEach(track => track.stop());
+       socketRef.current.disconnect()
+    }) 
+ },[history]) 
+
 
   //This function sets the value of the editor and the codeRef. echoEditor.setValue also runs this via the onChange
   function handleChange(value) {
@@ -300,7 +318,7 @@ const Room = (props) => {
             </div>
 
             <div class="media-controls">
-              <button>Leave</button>
+              <button onClick={handleLeave}>Leave</button>
             </div>
           </div>
         </div>
