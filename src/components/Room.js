@@ -11,11 +11,7 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-// Styled component acts as as container
-const Container = styled.div`
-  height: 100vh;
-  display: flex;
-`;
+
 
 const StyledVideo = styled.video`
   height: 400px;
@@ -142,11 +138,21 @@ const Room = (props) => {
   useEffect(() => {
     // Conncet to socket server
     socketRef.current = io.connect("/");
+    let hasCam = null
+    let hasMic = null
+    //Check if a user has a mic and camera
+    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+     hasCam = devices.some(function(d) {
+      return d.kind === "videoinput"; });
+     hasMic = devices.some(function(d) { return d.kind === "audioinput"; });
+     console.log("Cam: ", hasCam)
+     console.log("Mic: ", hasCam)
+    })
 
     navigator.mediaDevices
       .getUserMedia({
-        video: videoConstraints,
-        audio: true,
+        video: hasCam,
+        audio: hasMic,
 
         // stream contains both audio and video
       })
@@ -154,6 +160,9 @@ const Room = (props) => {
         //attach stream to userVideo Ref, allows us to display video
         userVideo.current.srcObject = stream;
         userTracks.current = stream;
+        
+        //Apply constraints 
+        userTracks.current.getVideoTracks(0)[0].applyConstraints(videoConstraints)
 
         console.log("The stream object", userVideo);
 
@@ -331,7 +340,7 @@ const Room = (props) => {
 
         <AceEditor
           ref={echoEditor}
-          onChange={handleChange} //testFunction
+          onChange={handleChange}
           value={codeRef.current}
           name="Echo-editor"
           mode={editorSettings.language}
@@ -342,7 +351,7 @@ const Room = (props) => {
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true,
             enableSnippets: true,
-            fontFamily: "Inconsolata",
+            fontFamily: 'Inconsolata',
             fontSize: 24,
           }}
         />
