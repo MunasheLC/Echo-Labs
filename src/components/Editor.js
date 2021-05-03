@@ -10,7 +10,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python"
 import "ace-builds/src-noconflict/mode-javascript"
 import "ace-builds/src-noconflict/mode-java"
-import "ace-builds/src-noconflict/theme-monokai"
+import "ace-builds/src-noconflict/theme-dracula"
 import "ace-builds/src-noconflict/ext-language_tools"
 import { edit } from 'ace-builds';
 import ace from "react-ace";
@@ -29,9 +29,7 @@ export function Editor(props) {
         theme,
         myChange,
         updateCode, //code updates
-        
-        
-    
+
     } = props
 
 
@@ -139,14 +137,14 @@ export function Editor(props) {
                 name= "Echo-editor"
                 mode= {language}
                 theme={theme}
-                width= "40vw"
-                height= "70vh"
+                width= "50vw"
+                height= "83vh"
                 setOptions={{
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
                 enableSnippets: true,
-                fontFamily: "Inconsolata",
-                fontSize: 24
+                fontFamily: "monospace",
+                fontSize: 18,
                 
                 }}
                 

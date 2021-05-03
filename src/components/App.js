@@ -14,7 +14,8 @@ import CreateLabRoom from "./CreateUserLabRoom"
 import join from "./Join"
 import Room from "./Room"
 import createRoom from "./CreateRoom"
-
+import Lobby from "./Lobby"
+import Requests from "./Requests"
 function App() {
   return (
     <Container>
@@ -28,6 +29,8 @@ function App() {
               <PrivateRoute exact path="/user-lab-rooms" component={UserLabRooms}/>
               <PrivateRoute exact path="/createLabRoom" component={CreateLabRoom}/>
               <PrivateRoute exact path="/join" component={join}/>
+              <PrivateRoute exact path="/Lobby/:lobbyID" component={Lobby}/>
+              <PrivateRoute exact path="/requests" component={Requests}/>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} /> 
               <Route path="/forgot-password" component={ForgotPassword} />

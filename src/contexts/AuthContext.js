@@ -3,15 +3,20 @@ import { auth } from "../firebase"
 import { db } from "../firebase"
 import "firebase/auth"
 import "firebase/firestore"
+import { v4 as uuid } from "uuid"
 
 
 function updateUserInfo(){
     const currentUser = auth.currentUser; 
+    const uid = uuid();
     if (currentUser){
         const uid = currentUser.uid;
         const email = currentUser.email;
+        const inCall = false;
+        const roomID = uuid();
+        
         if(uid){
-            const userData = {email,lastLoginTime: new Date()};
+            const userData = {email, inCall, roomID,lastLoginTime: new Date()};
             return db.doc(`/users/${uid}`).set(userData, {merge:true}); // this takes the users email and lastlogintime and updates them on firestore. 
         }
     }

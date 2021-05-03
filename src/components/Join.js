@@ -6,7 +6,7 @@ import "firebase/firestore"
 import { auth } from "../firebase"
 import { db } from "../firebase"
 import firebase from 'firebase/app'
-
+var lab = "";
 export const addUserToLabList = async(labID) =>{ //adds the labid to the user's user collections lab field in firestore
   const usercollection = db.collection('users');
   const currentUser = auth.currentUser;
@@ -27,7 +27,7 @@ export const addUserToLabList = async(labID) =>{ //adds the labid to the user's 
 }
 
 export default function Join(){
-
+  var admin = "";
   async function adminCheckKey(){ //checks if user key is associated with lab_Admin if not it calls studentCheckKey() to check if the key is a students
     const labcollection = db.collection('labs');
     const labcodeinput = document.getElementById("labcode-input").value; //users inputted code
@@ -42,11 +42,14 @@ export default function Join(){
     console.log('password correct'); //else password is correct
     adminKeyMatch.forEach(doc =>{ 
             console.log(doc.id, '=>', doc.data());
+            lab = doc.data().Lab_Name;
             const labDoc = labcollection.doc(doc.id);
             labDoc.update({ 
               Lab_Admins : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email) //add current users email to lab admins in firestore
           })
+            admin = true;
             addUserToLabList(doc.id) // if key is valid add lab to users firestore lab list, display lab on their dashboard
+            document.getElementById("printStatus").innerHTML="You have been granted access to: " + lab + " as a tutor. This lab will now displayed in your Lab Rooms";
     });
     
   }
@@ -59,18 +62,21 @@ export default function Join(){
     } 
     console.log('password correct');
     studentKeyMatch.forEach(doc =>{
-            console.log(doc.id, '=>', doc.data());
             const labDoc = db.collection('labs').doc(doc.id);
+            lab = doc.data().Lab_Name;
             labDoc.update({
               Lab_Students : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email) //add current user as a student in firestore .
           })
-            addUserToLabList(doc.id) 
+            admin=false;
+            addUserToLabList(doc.id)
+            document.getElementById("printStatus").innerHTML="You have been granted access to: " + lab + " as a Student. This lab will now be displayed in your labrooms";
+
     });
   }
 
   async function handleClick(e) {
     e.preventDefault();
-    adminCheckKey() 
+    adminCheckKey();
   }
 
   return(
@@ -92,8 +98,12 @@ export default function Join(){
             </Button>
           </Form>
 
+          <div id="printStatus" style={{marginTop:"10px",color:"white"}}></div>
+
           <div className="w-100 text-center mt-2">
+          <Button variant="info" style={{marginTop:"10vh"}}>
             <Link style={{color:"white"}} to="/dashboard"> Back to Dashboard</Link>
+            </Button>
           </div>
       </Card.Body>
     </Card>
