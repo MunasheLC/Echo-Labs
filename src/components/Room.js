@@ -10,6 +10,9 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
+// let {PythonShell} = require('python-shell')
+
+
 
 
 
@@ -38,16 +41,18 @@ const videoConstraints = {
 
 const Room = (props) => {
   const [peers, setPeers] = useState([]); //local list of peers for displaying purposes
-  const socketRef = useRef(); //server
+  const socketRef = useRef(); //socket connection
   const userVideo = useRef(); //users video
   const userTracks = useRef(); // Track ref for mute/unmute functions
-  const peersRef = useRef([]); // peer connection
+  const peersRef = useRef([]); // peer connections
   const roomID = props.match.params.roomID; //The ID for the room
   const [editorCode, setEditorCode] = useState(""); //stores value of the editor for sending to server
   const codeRef = useState(""); //This ref syncs the editor to the onChange function -> basically just a store for the code too
   const [peerFlag, setPeerFlag] = useState(false); //This flag is necessary to handle updates between the server and the current user so that received update aren't automatically sent -> this behavior results in a loop 
   const echoEditor = useRef(null); // Ref is used to get access to the aceEditor functions -> used to update the value of the editor
-  const history = useHistory()
+  const history = useHistory() //Hisory hook
+ const [echoConsoleLogs, setEchoConsoleLogs] = useState("")
+  // console.log("python", PythonShell)
 
   //Function to create peers
   function createPeer(userToSignal, callerID, stream) {
@@ -131,6 +136,30 @@ const Room = (props) => {
     socketRef.current.disconnect()
     history.push("/dashboard")
     
+
+  }
+
+  //Function to run the code in the editor - runs in server via pyshell
+  function handleRunCode(){
+    
+    let codeToRun = echoEditor.current.editor.getValue()
+    socketRef.current.emit("run-code", codeToRun )
+
+    socketRef.current.on("receive-result", result => {
+
+      console.log("result from server is:", result)
+      // setEchoConsoleLogs(result)
+      
+
+    })
+
+
+  }
+
+  //Clears the editor
+  function handleClearEditor(){
+
+    echoEditor.current.editor.setValue("")
 
   }
 
@@ -259,6 +288,8 @@ const Room = (props) => {
             );
           }
         });
+
+
       });
   }, []);
 
@@ -303,7 +334,7 @@ const Room = (props) => {
 
   //Add function to let users change the editor settings, maybe in a menu
   const editorSettings = {
-    language: "javascript",
+    language: "python",
     displayName: "Echo code editor",
     theme: "monokai",
   };
@@ -356,16 +387,23 @@ const Room = (props) => {
           }}
         />
 
-        <div id="console--button-wrapper">
-          <div class="console-buttons">
-            <button class="run-button">Run</button>
-            <button class="clear-button">Clear</button>
+        <div id="console-wrapper">
+          <div class="console-buttons-section">
+            <button onClick={handleRunCode} class="console-button-run">Run</button>
+            <button onClick={handleClearEditor}class="console-button-clear">Clear</button>
           </div>
+
+          <div class="main-console">
+          <ul class="conole-logs">
+
+              <li style={{fontSize: 24}}> {">>>"} {echoConsoleLogs}</li>
+
+          </ul>
         </div>
 
-        <div id="main-console">
-          <ul class="conole-logs"></ul>
         </div>
+
+        
       </div>
     </div>
   );

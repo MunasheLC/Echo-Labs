@@ -15,6 +15,7 @@
     "firebase-admin": "^9.5.0",
     "generate-password": "^1.6.0",
     "peer": "^0.6.1",
+    "python-shell": "^3.0.0",
     "react": "^17.0.1",
     "react-ace": "^9.4.0",
     "react-bootstrap": "^1.4.0",

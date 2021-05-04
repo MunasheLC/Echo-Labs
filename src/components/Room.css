@@ -65,3 +65,47 @@
   font-family: 'Courier New', Courier, monospace
 
 }
+
+#console-wrapper{
+
+  display: flex;
+  height: 10vh;
+
+}
+
+.console-buttons-section{
+
+  display: flex;
+  flex-direction: column;
+  background-color: #2e2e2e;
+  width: 5vw; 
+  cursor: pointer;
+
+}
+
+.main-console{
+  margin-top: 0;
+  background-color: aquamarine;
+  /* height: 15vh; */
+  overflow: auto;
+  position: relative;
+  /* margin-left: 2vw; */
+  
+
+}
+
+.console-button-run{
+  margin-top: 30%;
+  border: 0;
+  padding: .5em;
+  margin-bottom: 10px;
+  
+
+}
+
+.console-button-clear{
+  
+  border: 0;
+  padding: .5em;
+ 
+}

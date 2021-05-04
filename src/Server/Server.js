@@ -4,6 +4,8 @@ const app = express();
 const server = http.createServer(app);
 const socket = require("socket.io");
 const io = socket(server);
+let {PythonShell} = require('python-shell')
+
 
 
 //Collection of rooms
@@ -132,6 +134,29 @@ io.on('connection', socket => {
 
     }) 
 
+    //Send code to the server and have it run in the python shell
+    socket.on("run-code", code => {
+
+        try{
+            PythonShell.runString(code, null, function (err, result) {
+            if (err) {socket.emit("receive-result", err)}
+            console.log('execution finished');
+            
+            socket.emit("receive-result", result)
+        })}
+
+        catch(e){
+
+            console.log(e)
+
+        }
+            
+
+        
+    })
+
+
+   
 });
 
 server.listen(8000, () => console.log('server is running on port 8000'));
