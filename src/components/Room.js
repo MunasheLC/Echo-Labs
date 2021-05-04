@@ -64,7 +64,7 @@ const Room = (props) => {
   const echoEditor = useRef(null); // Ref is used to get access to the aceEditor functions -> used to update the value of the editor
   const history = useHistory() //Hisory hook
   const hist = useHistory();
- const [echoConsoleLogs, setEchoConsoleLogs] = useState("")
+ const [echoConsoleLogs, setEchoConsoleLogs] = useState("");
   // console.log("python", PythonShell)
   
 
@@ -202,9 +202,8 @@ const Room = (props) => {
     socketRef.current.on("receive-result", result => {
 
       console.log("result from server is:", result)
-      // setEchoConsoleLogs(result)
+      setEchoConsoleLogs(result)
       
-
     })
 
 
@@ -214,6 +213,7 @@ const Room = (props) => {
   function handleClearEditor(){
 
     echoEditor.current.editor.setValue("")
+    setEchoConsoleLogs("");
 
   }
 
@@ -418,7 +418,7 @@ const Room = (props) => {
             mode={editorSettings.language}
             theme={editorSettings.theme}
             width="50vw"
-            height="83vh"
+            height="78vh"
             setOptions={{
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
@@ -428,15 +428,23 @@ const Room = (props) => {
             }}
           />
 
-          <div id="console--button-wrapper">
-            <div class="console-buttons">
+          <div id="console-wrapper">
+            <div class="console-buttons-section">
               <button onClick={handleRunCode} class="run-button">Run</button>
               <button onClick={handleClearEditor} class="clear-button">Clear</button>
             </div>
           </div>
 
           <div id="main-console">
-            <ul class="conole-logs"></ul>
+            <ul class="conole-logs">
+            {
+                echoConsoleLogs ? echoConsoleLogs.map(value => (
+                  <li style={{fontSize: 18}}> {">>>"} {value}</li>
+                ))
+                : console.log("Array is empty")
+            }
+            
+            </ul>
           </div>
         </div>
 
