@@ -49,7 +49,7 @@ const Participants = (props) => {
     }
 
 
-    const SetParticipants = ()=>{
+    const setParticipants = ()=>{
         useEffect(() => {
         const interval = setInterval(async() => {
             UpdateParticipants(labName);
@@ -59,7 +59,7 @@ const Participants = (props) => {
         return () => clearInterval(interval);
         },[]);
     };
-    SetParticipants();
+    setParticipants();
 
     // const run=()=>{ //is this even needed?
     //     useEffect(() => {

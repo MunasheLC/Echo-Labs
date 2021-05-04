@@ -60,12 +60,12 @@ export const lobbyID = async(lab) => { //Queries firestore to get a specific lab
     const result = await getLabData(lab);
     const labdoc = await db.doc(`labs/${result}`).get();
     const lobbyData = labdoc.data();
-    const ID = lobbyData.ID;
+    const ID = lobbyData.RoomID;
     return ID;
 }
 
 export const getLobbyID = async(lab) =>{ //needs to be called in order for function lobbyID to work
-    const result = await lobbyID(lab); 
+    const result = await lobbyID(lab); ;
     return result;
 };
 
