@@ -72,9 +72,18 @@ export default function CreateUserLabRoom(){
     const labCheck = await labcollection.where('Lab_Name', '==', labroomName).get();
     if (labCheck){
       labCheck.forEach(doc =>{
-        addUserToLabList(doc.id); 
+        addUserToLabList(doc.id);
+        addUserToAdminList(doc.id); //added this to add host to tutor list in labroom.
       });
     }
+  }
+
+  async function addUserToAdminList(labName){
+    const labcollection = db.collection('labs');
+    const labDoc = labcollection.doc(labName);
+    labDoc.update({ 
+      Lab_Admins : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email) //add current users email to lab admins in firestore
+  })
   }
 
   return(
