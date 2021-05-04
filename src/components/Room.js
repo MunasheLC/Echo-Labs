@@ -436,9 +436,6 @@ const Room = (props) => {
           </div>
 
           <div id="main-console">
-<<<<<<< HEAD
-            <ul class="conole-logs">{echoConsoleLogs}</ul>
-=======
             <ul class="conole-logs">
             {
                 echoConsoleLogs ? echoConsoleLogs.map(value => (
@@ -448,7 +445,6 @@ const Room = (props) => {
             }
             
             </ul>
->>>>>>> 8045a491f8e6f4e58c8a35d4411a142ab394277e
           </div>
         </div>
 
