@@ -436,7 +436,7 @@ const Room = (props) => {
           </div>
 
           <div id="main-console">
-            <ul class="conole-logs"></ul>
+            <ul class="conole-logs">{echoConsoleLogs}</ul>
           </div>
         </div>
 
