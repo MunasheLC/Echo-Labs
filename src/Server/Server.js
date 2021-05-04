@@ -136,11 +136,11 @@ io.on('connection', socket => {
 
     //Send code to the server and have it run in the python shell
     socket.on("run-code", code => {
-
+        console.log("CodeToRun: ", code)
         try{
             PythonShell.runString(code, null, function (err, result) {
             if (err) {socket.emit("receive-result", err)}
-            console.log('execution finished');
+            console.log('execution finished', result);
             
             socket.emit("receive-result", result)
         })}

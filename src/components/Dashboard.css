@@ -1,8 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Lexend+Mega&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap');
-
 #dash-x {
   float: left;
   margin-right: 8px;
@@ -64,8 +59,37 @@ video#partnerVid {
   transition: 0.5s;
 }
 
+#lab-card-style-3 {
+  width: 12vw;
+  height: 10vh;
+  border-radius: 20px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+  background-color: #6292bada;
+  margin-bottom: 30px;
+}
+#requestButton {
+  background-color: #1f2647;
+  margin-left: 2.5vw;
+  width: 15vw;
+  display: none;
+}
+.ace_editor * {
+  font-family: monospace !important;
+}
+#lab-card-style-4 {
+  width: 12vw;
+  height: 10vh;
+  border-radius: 20px;
+  box-shadow: 0px 3px #1f2647;
+  transition: 0.5s;
+  background-color: #8c19ff;
+  margin-bottom: 30px;
+}
+
 #lab-card-style-1:hover,
-#lab-card-style-2:hover {
+#lab-card-style-2:hover,
+#lab-card-style-3:hover {
   transform: scale(1.1);
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
 }
@@ -84,6 +108,30 @@ video#partnerVid {
   align-items: flex-start;
   height: 63vh;
 }
+#row2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-flow: wrap;
+  align-items: flex-start;
+  height: 35vh;
+}
+#row3 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-flow: wrap;
+  align-items: flex-start;
+  height: 18vh;
+}
+#column-row {
+  display: flex;
+  flex-direction: column;
+  flex-flow: column wrap;
+  align-items: flex-start;
+  height: 63vh;
+}
+
 .lab-row {
   overflow-y: scroll;
 }
@@ -121,6 +169,11 @@ video#partnerVid {
   color: white;
   text-align: center;
   margin-top: 50px;
+}
+.dash-cards-h3 {
+  color: white;
+  text-align: center;
+  margin-top: -6px;
 }
 
 #lab-card-style-2 {
@@ -332,8 +385,4 @@ video#partnerVid {
   .h2-heading {
     font-size: 4rem;
   }
-}
-
-.dash-container{
-  font-family: "Oswald", sans-serif, monospace;
 }

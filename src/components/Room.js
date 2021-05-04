@@ -3,23 +3,32 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import "./Room.css";
+import {inCallFalse} from './DisplayParticipants';
+import { db, auth } from "../firebase";
 import { Link, useHistory } from "react-router-dom"
+// import Editor, { echoEditor } from "./Editor"
+// import { edit } from "ace-builds";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-java";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/ext-language_tools";
-// let {PythonShell} = require('python-shell')
+import { Button} from "react-bootstrap"
+import {getLobbyID} from './Host'
+import {UpdateRequests} from './Requests';
+import {getLabData} from './Host';
+import {removeUserFromRequestList} from './Requests'
 
-
-
-
+// Styled component acts as as container
+const Container = styled.div`
+  height: 100vh;
+  display: flex;
+`;
 
 const StyledVideo = styled.video`
-  height: 400px;
-  width: 300px;
-  padding: 10px;
+  width: 480px;
+  padding:10px;
 `;
 
 const Video = (props) => {
@@ -38,8 +47,11 @@ const videoConstraints = {
   height: window.innerHeight / 2,
   width: window.innerWidth / 2,
 };
+var lab="";
+var student="";
 
 const Room = (props) => {
+  document.getElementById('root').style.fontFamily="monospace"; 
   const [peers, setPeers] = useState([]); //local list of peers for displaying purposes
   const socketRef = useRef(); //socket connection
   const userVideo = useRef(); //users video
@@ -51,8 +63,49 @@ const Room = (props) => {
   const [peerFlag, setPeerFlag] = useState(false); //This flag is necessary to handle updates between the server and the current user so that received update aren't automatically sent -> this behavior results in a loop 
   const echoEditor = useRef(null); // Ref is used to get access to the aceEditor functions -> used to update the value of the editor
   const history = useHistory() //Hisory hook
+  const hist = useHistory();
  const [echoConsoleLogs, setEchoConsoleLogs] = useState("")
   // console.log("python", PythonShell)
+  
+
+  //tutorCheck - Called when a peer is leaving, this checks if the peer leaving is a tutor, 
+  //if so remove the student from the request list on firestore as request has been satified. 
+  async function tutorCheck(labid){ 
+    const currentUserEmail = auth.currentUser.email
+    const labDoc = await db.doc(`labs/${labid}`).get();
+    const labData = labDoc.data();
+    const tutors = labData.Lab_Admins;
+    
+    if (tutors.includes(currentUserEmail)){ 
+          removeUserFromRequestList(lab,student) 
+          inCallFalse(currentUserEmail);
+    }
+    else{
+        console.log("is student");
+    }
+  }
+  async function handleRoom(){
+    
+		try{
+      console.log("in handle room" + lab);
+      var labID = await getLabData(lab);
+      //if user is tutor remove the student from requests when going back into lobby
+      tutorCheck(labID);
+			getLobbyID(lab).then((value) => {hist.push(`/Lobby/${value}`)});
+
+		} catch{
+		}
+	}
+  //used when someone presses request Help - Function calls UpdateRequests 
+  //which updates a specific labs requestsList on firestore with the current users email.
+  async function requestHelp(){
+		try{
+      alert("Requesting help");
+      UpdateRequests(lab);
+
+		} catch{
+		}
+	}
 
   //Function to create peers
   function createPeer(userToSignal, callerID, stream) {
@@ -129,20 +182,21 @@ const Room = (props) => {
     }
   }
 
-  //Leave button function
-  function handleLeave(){
+    //Leave button function
+    function handleLeave(){
 
-    userTracks.current.getTracks().forEach(track => track.stop());
-    socketRef.current.disconnect()
-    history.push("/dashboard")
-    
-
-  }
+      userTracks.current.getTracks().forEach(track => track.stop());
+      socketRef.current.disconnect()
+      history.push("/dashboard")
+      
+    }
+  
 
   //Function to run the code in the editor - runs in server via pyshell
   function handleRunCode(){
     
     let codeToRun = echoEditor.current.editor.getValue()
+    console.log("codeToRun: ", codeToRun)
     socketRef.current.emit("run-code", codeToRun )
 
     socketRef.current.on("receive-result", result => {
@@ -167,21 +221,11 @@ const Room = (props) => {
   useEffect(() => {
     // Conncet to socket server
     socketRef.current = io.connect("/");
-    let hasCam = null
-    let hasMic = null
-    //Check if a user has a mic and camera
-    navigator.mediaDevices.enumerateDevices().then(function(devices) {
-     hasCam = devices.some(function(d) {
-      return d.kind === "videoinput"; });
-     hasMic = devices.some(function(d) { return d.kind === "audioinput"; });
-     console.log("Cam: ", hasCam)
-     console.log("Mic: ", hasCam)
-    })
 
     navigator.mediaDevices
       .getUserMedia({
-        video: hasCam,
-        audio: hasMic,
+        video: videoConstraints,
+        audio: true,
 
         // stream contains both audio and video
       })
@@ -189,9 +233,6 @@ const Room = (props) => {
         //attach stream to userVideo Ref, allows us to display video
         userVideo.current.srcObject = stream;
         userTracks.current = stream;
-        
-        //Apply constraints 
-        userTracks.current.getVideoTracks(0)[0].applyConstraints(videoConstraints)
 
         console.log("The stream object", userVideo);
 
@@ -293,7 +334,6 @@ const Room = (props) => {
       });
   }, []);
 
-  
   //Real time code updates - runs everytime editorCode state is updated
   useEffect(() => {
 
@@ -303,15 +343,15 @@ const Room = (props) => {
 
   }, [editorCode]); //Remove []
 
-  //MDisconnects when user changes the URL
-  useEffect(() => {
+    //MDisconnects when user changes the URL
+    useEffect(() => {
 
-    return history.listen((location) => { 
-       userTracks.current.getTracks().forEach(track => track.stop());
-       socketRef.current.disconnect()
-    }) 
- },[history]) 
-
+      return history.listen((location) => { 
+         userTracks.current.getTracks().forEach(track => track.stop());
+         socketRef.current.disconnect()
+      }) 
+   },[history]) 
+  
 
   //This function sets the value of the editor and the codeRef. echoEditor.setValue also runs this via the onChange
   function handleChange(value) {
@@ -336,77 +376,104 @@ const Room = (props) => {
   const editorSettings = {
     language: "python",
     displayName: "Echo code editor",
-    theme: "monokai",
+    theme: "dracula",
   };
 
   return (
     <div id="room-container">
-      <div id="video-grid">
-        <StyledVideo muted ref={userVideo} autoPlay playsInline />
-        {peers.map((peer, index) => {
-          return <Video key={peer.peerID} peer={peer.peer} />;
-        })}
+      <div className="dash-nav" style={{position:"relative",width:"99vw", height: "10vh",backgroundColor:"#2a315d"}}>
+					<div className="dash-logo" style={{ position:"relative", top:"3vh",width:"10vw", height:"30vh", color:"white"}}>
 
-        <div class="controls">
-          <div class="control-block">
-            <div class="media-controls">
-              <button onClick={muteAudio}>Mute</button>
+						<div className= "dash-echo-lines">
+							<div id="dash-x" className="animate__animated animate__bounceInDown"></div>
+							<div id="dash-y" className="animate__animated animate__bounceInDown animate__delay-1s"></div>
+							<div id="dash-z" className="animate__animated animate__bounceInDown animate__delay-2s" ></div>
+						</div>
+
+					</div>
+          <div className="w-100 text-center mt-2" style={{right: "-75vw", top: "-30vh", position:"relative",height:"45vh"}}>
+						<ul className="nav flex-row">
+            <Button onClick={handleRoom}style={{backgroundColor:"#1f2647", marginLeft:"2.5vw", width:"5vw", height: "8vh"}}>
+                  <h6> Back to lobby </h6>
+              </Button>
+              <Button onClick={requestHelp}style={{backgroundColor:"#1f2647", marginLeft:"2.5vw", width:"5vw", height: "8vh"}}>
+                  <h6> Request Help </h6>
+              </Button>
+              </ul>
             </div>
+        </div>
 
-            <div onClick={stopVideo} class="media-controls">
-              <button>Camera</button>
+      {/* <div id="editor-vid-container"> */}
+
+        <div className="editor-container">
+          {/* <div className="editor-title">
+            {editorSettings.displayName} in mode {editorSettings.language}
+          </div> */}
+
+          <AceEditor
+            ref={echoEditor}
+            onChange={handleChange} //testFunction
+            value={codeRef.current}
+            name="Echo-editor"
+            mode={editorSettings.language}
+            theme={editorSettings.theme}
+            width="50vw"
+            height="83vh"
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              fontFamily: "monospace",
+              fontSize: 18,
+            }}
+          />
+
+          <div id="console--button-wrapper">
+            <div class="console-buttons">
+              <button onClick={handleRunCode} class="run-button">Run</button>
+              <button onClick={handleClearEditor} class="clear-button">Clear</button>
             </div>
+          </div>
 
-            <div class="media-controls">
-              <button onClick={handleLeave}>Leave</button>
+          <div id="main-console">
+            <ul class="conole-logs"></ul>
+          </div>
+        </div>
+
+        <div id="video-grid">
+          <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          {peers.map((peer, index) => {
+            return <Video key={peer.peerID} peer={peer.peer} />;
+          })}
+
+          <div className="controls">
+            <div className="control-block">
+              <div className="media-controls">
+                <Button onClick={muteAudio}>Mute</Button>
+              </div>
+
+              <div onClick={stopVideo} className="media-controls">
+                <Button>Camera</Button>
+              </div>
+
+              <div className="media-controls">
+                <Button onClick={handleLeave}>Leave</Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="editor-container">
-        <div className="editor-title">
-          {editorSettings.displayName} in mode {editorSettings.language}
         </div>
-
-        <AceEditor
-          ref={echoEditor}
-          onChange={handleChange}
-          value={codeRef.current}
-          name="Echo-editor"
-          mode={editorSettings.language}
-          theme={editorSettings.theme}
-          width="40vw"
-          height="70vh"
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
-            fontFamily: 'Inconsolata',
-            fontSize: 24,
-          }}
-        />
-
-        <div id="console-wrapper">
-          <div class="console-buttons-section">
-            <button onClick={handleRunCode} class="console-button-run">Run</button>
-            <button onClick={handleClearEditor}class="console-button-clear">Clear</button>
-          </div>
-
-          <div class="main-console">
-          <ul class="conole-logs">
-
-              <li style={{fontSize: 24}}> {">>>"} {echoConsoleLogs}</li>
-
-          </ul>
-        </div>
-
-        </div>
-
-        
-      </div>
-    </div>
   );
 };
+
+
+//Function is used to bring across the labID that the user is currently in
+export function getLab3(labID){
+  lab=labID;
+}
+//Function is used to bring across the students email in which the tutor wants to connect with.
+export function getStudent(studentemail){
+  student=studentemail;
+}
 
 export default Room;

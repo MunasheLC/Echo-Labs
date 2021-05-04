@@ -3,7 +3,8 @@ import { v4 as uuid } from "uuid"
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
-import { getCheckID, makeActive, getCheckActive, getLabHost } from './Host'
+import { getLobbyID, makeActive, getcheckLabActive, getLabHost } from './Host'
+import {getLab2} from './Lobby'
 import { auth } from "../firebase"
 import { db } from "../firebase"
 
@@ -13,7 +14,9 @@ const CreateRoom = (props) => {
   const email = currentUser.email
 
     function join_room(){
-        getCheckID(lab).then((value) => {props.history.push(`/room/${value}`)});
+        getLobbyID(lab).then((value) => {props.history.push(`/Lobby/${value}`)});
+        getLab2(lab);
+        //  getCheckID(lab).then((value) => {props.history.push(`/room/${value}`)});
 
     }
 
@@ -30,7 +33,7 @@ const CreateRoom = (props) => {
 
     function isActive(){
       getLabHost(lab).then((value) => { if ( value !== email){  
-        getCheckActive(lab).then((v) => { if (v === true){document.getElementById('Join').style.display = 'block';}}) }});
+      getcheckLabActive(lab).then((v) => { if (v === true){document.getElementById('Join').style.display = 'block';}}) }});
     }
 
     return(

@@ -1,18 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap');
-
-
 #room-container {
-  display: flex;
-  height: 100vh;
   width: 100vw;
-  background-color: black;
+  max-width: 99vw;
+  height: 100vh;
+  background-color: #1e2133;
+  position: relative;
+  top: 2vh;
+  left: 0.5vw;
+  box-shadow: 15px -10px 10px -6px #00ffef;
 }
 
-#video-grid {
+/* #video-grid {
   display: flex;
   flex-direction: column;
   position: relative;
-  left: 80vw;
+  left: 60vw;
+} / */
+
+#video-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-flow: wrap;
+  align-items: flex-start;
+  height: 63vh;
+  width: 30vw;
+  position: relative;
+  left: 65vw;
+  top: -85vh;
 }
 
 .control-block {
@@ -25,6 +39,7 @@
   background-color: darkgray;
   justify-content: center;
   align-items: center;
+  width: 30vw;
 }
 
 .media-controls {
@@ -35,77 +50,27 @@
   justify-content: space-between;
 }
 
-/* .center-codeEditor{
+.center-codeEditor{
   margin-top: 50px;
   display: flex;
   flex-direction: column;
   position: relative;
   left: 10vw;
-  
 
-} */
+
+}
 
 .main-console {
-
   background-color: #fff;
   width: 100%;
   height: 130px;
-  margin-top: .9em;
+  margin-top: 0.9em;
   border: 1px solid var(--editor-border);
   overflow: auto;
-
 }
 
-.editor-container{
-  margin-top: 50px;
+.editor-container {
   display: flex;
   flex-direction: column;
   position: relative;
-  left: 10vw;
-  font-family: 'Courier New', Courier, monospace
-
-}
-
-#console-wrapper{
-
-  display: flex;
-  height: 10vh;
-
-}
-
-.console-buttons-section{
-
-  display: flex;
-  flex-direction: column;
-  background-color: #2e2e2e;
-  width: 5vw; 
-  cursor: pointer;
-
-}
-
-.main-console{
-  margin-top: 0;
-  background-color: aquamarine;
-  /* height: 15vh; */
-  overflow: auto;
-  position: relative;
-  /* margin-left: 2vw; */
-  
-
-}
-
-.console-button-run{
-  margin-top: 30%;
-  border: 0;
-  padding: .5em;
-  margin-bottom: 10px;
-  
-
-}
-
-.console-button-clear{
-  
-  border: 0;
-  padding: .5em;
- 
 }
