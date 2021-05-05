@@ -24,7 +24,7 @@ function App() {
             <Switch>
               <PrivateRoute path="/create-room" component={createRoom}/>
               <PrivateRoute path="/room/:roomID" component={Room}/>
-              <PrivateRoute exact path="/dashboard" component={Dashboard}/>
+              <PrivateRoute exact path="/" component={Dashboard}/>
               <PrivateRoute exact path="/update-profile" component={UpdateProfile}/>
               <PrivateRoute exact path="/user-lab-rooms" component={UserLabRooms}/>
               <PrivateRoute exact path="/createLabRoom" component={CreateLabRoom}/>

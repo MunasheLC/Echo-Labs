@@ -187,7 +187,7 @@ const Room = (props) => {
 
       userTracks.current.getTracks().forEach(track => track.stop());
       socketRef.current.disconnect()
-      history.push("/dashboard")
+      history.push("/")
       
     }
   

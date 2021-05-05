@@ -34,7 +34,7 @@ export default function Lobby() {
 		try{
 			//removes user from the participant list when they click the leave button
 			removeUserFromLabList(lab);
-			history.push("/dashboard")
+			history.push("/")
 
 		} catch{
 		setError("Failed to go to dashboard")

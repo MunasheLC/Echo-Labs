@@ -102,7 +102,7 @@ export default function Join(){
 
           <div className="w-100 text-center mt-2">
           <Button variant="info" style={{marginTop:"10vh"}}>
-            <Link style={{color:"white"}} to="/dashboard"> Back to Dashboard</Link>
+            <Link style={{color:"white"}} to="/"> Back to Dashboard</Link>
             </Button>
           </div>
       </Card.Body>
