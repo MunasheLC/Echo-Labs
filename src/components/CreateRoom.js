@@ -33,7 +33,14 @@ const CreateRoom = (props) => {
 
     function isActive(){
       getLabHost(lab).then((value) => { if ( value !== email){  
-      getcheckLabActive(lab).then((v) => { if (v === true){document.getElementById('Join').style.display = 'block';}}) }});
+      getcheckLabActive(lab).then((v) => { 
+        if (v === true){
+          document.getElementById('Join').style.display = 'block';
+        }
+        else{
+          document.getElementById('display').innerHTML= `${lab} is currently not active`
+        }
+      }) }});
     }
 
     return(
@@ -41,7 +48,7 @@ const CreateRoom = (props) => {
       // if user in student list and start is true , give a join option
         <Card id="userinput-container">
         <Card.Body>
-          <h2 className="text-center mb-4" style={{ color: "white" }}>Lab-Room</h2>
+          <h2 className="text-center mb-4" style={{ color: "white" }}>Lab-Room: {lab}</h2>
           <hr></hr>
           <i style={{color:"white", fontSize: "6rem", position:"relative", top:"2vh" ,right: "1vw"}} className="fas fa-chalkboard-teacher w-100 text-center mt-2"></i>
           <div style={{position:"relative", top: "10vh"}} className="w-100 text-center mt-2">
@@ -51,8 +58,9 @@ const CreateRoom = (props) => {
 				</Button>
         {isHost()}
 
+        <h4 id='display'></h4>
 				<Button id="Join" style={{width: "100%", display:"None"}} variant="info" onClick={Join}>
-						<h2 className="Button-text"> Join </h2>  
+						<h2 className="Button-text"> Join Lobby </h2>  
 				</Button>
         {isActive()}
 			</div>
