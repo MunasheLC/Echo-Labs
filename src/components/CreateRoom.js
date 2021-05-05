@@ -33,7 +33,14 @@ const CreateRoom = (props) => {
 
     function isActive(){
       getLabHost(lab).then((value) => { if ( value !== email){  
-      getcheckLabActive(lab).then((v) => { if (v === true){document.getElementById('Join').style.display = 'block';}}) }});
+      getcheckLabActive(lab).then((v) => { 
+        if (v === true){
+          document.getElementById('Join').style.display = 'block';
+        }
+        else{
+          document.getElementById('display').innerHTML= `${lab} is currently not active`
+        }
+      }) }});
     }
 
     return(
@@ -51,6 +58,7 @@ const CreateRoom = (props) => {
 				</Button>
         {isHost()}
 
+        <h4 id='display'></h4>
 				<Button id="Join" style={{width: "100%", display:"None"}} variant="info" onClick={Join}>
 						<h2 className="Button-text"> Join </h2>  
 				</Button>

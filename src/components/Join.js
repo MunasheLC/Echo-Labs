@@ -6,7 +6,12 @@ import "firebase/firestore"
 import { auth } from "../firebase"
 import { db } from "../firebase"
 import firebase from 'firebase/app'
+import { useState, useGlobal } from 'react'
+import { Modal} from "react-bootstrap"
 var lab = "";
+import {useHistory } from "react-router-dom"
+import {getLab} from './CreateRoom';
+
 export const addUserToLabList = async(labID) =>{ //adds the labid to the user's user collections lab field in firestore
   const usercollection = db.collection('users');
   const currentUser = auth.currentUser;
@@ -27,6 +32,12 @@ export const addUserToLabList = async(labID) =>{ //adds the labid to the user's 
 }
 
 export default function Join(){
+  const [makeVisable, setmakeVisable] = useState(false);
+
+  const handleClose = () => setmakeVisable(false);
+  const handleVisability = () => setmakeVisable(true);
+
+  const history = useHistory()
   var admin = "";
   async function adminCheckKey(){ //checks if user key is associated with lab_Admin if not it calls studentCheckKey() to check if the key is a students
     const labcollection = db.collection('labs');
@@ -50,7 +61,8 @@ export default function Join(){
             admin = true;
             addUserToLabList(doc.id) // if key is valid add lab to users firestore lab list, display lab on their dashboard
             document.getElementById("printStatus").innerHTML="You have been granted access to: " + lab + " as a tutor. This lab will now displayed in your Lab Rooms";
-    });
+            handleVisability();
+          });
     
   }
 
@@ -69,15 +81,21 @@ export default function Join(){
           })
             admin=false;
             addUserToLabList(doc.id)
-            document.getElementById("printStatus").innerHTML="You have been granted access to: " + lab + " as a Student. This lab will now be displayed in your labrooms";
+            document.getElementById("printStatus").innerHTML="Successfully joined : " + lab;
+            handleVisability();
+
 
     });
+  }
+  function pushToLab(){
+    history.push("/user-lab-rooms");
   }
 
   async function handleClick(e) {
     e.preventDefault();
     adminCheckKey();
   }
+
 
   return(
     <Card id="userinput-container">
@@ -93,12 +111,33 @@ export default function Join(){
                 />
             </Form.Group>
 
+
             <Button className="w-100" onClick={handleClick}>
               Join Room
             </Button>
           </Form>
 
           <div id="printStatus" style={{marginTop:"10px",color:"white"}}></div>
+          <Modal show={makeVisable} onHide={handleClose} animation={false}>
+								<Modal.Header closeButton>
+									<Modal.Title>You have joined:</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+										<h2> {lab} </h2>
+
+								</Modal.Body>
+								<Modal.Footer>
+                <Link to='/create-room' onClick={() => getLab(lab)}>
+                  <Button variant="secondary">
+										Go to {lab}
+									  </Button>
+                </Link>
+									<Button variant="secondary" onClick={handleClose}>
+										Close
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
 
           <div className="w-100 text-center mt-2">
           <Button variant="info" style={{marginTop:"10vh"}}>
