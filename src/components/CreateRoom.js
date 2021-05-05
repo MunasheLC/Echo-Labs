@@ -60,7 +60,7 @@ const CreateRoom = (props) => {
 
         <h4 id='display'></h4>
 				<Button id="Join" style={{width: "100%", display:"None"}} variant="info" onClick={Join}>
-						<h2 className="Button-text"> Join </h2>  
+						<h2 className="Button-text"> Join Lobby </h2>  
 				</Button>
         {isActive()}
 			</div>
