@@ -16,6 +16,7 @@ import Room from "./Room"
 import createRoom from "./CreateRoom"
 import Lobby from "./Lobby"
 import Requests from "./Requests"
+import BarChartt from "./Stats"
 function App() {
   return (
     <Container>
@@ -31,6 +32,7 @@ function App() {
               <PrivateRoute exact path="/join" component={join}/>
               <PrivateRoute exact path="/Lobby/:lobbyID" component={Lobby}/>
               <PrivateRoute exact path="/requests" component={Requests}/>
+              <PrivateRoute exact path="/stats" component={BarChartt}/>
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} /> 
               <Route path="/forgot-password" component={ForgotPassword} />

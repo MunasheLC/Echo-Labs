@@ -97,7 +97,7 @@ const Room = (props) => {
 		}
 	}
   //used when someone presses request Help - Function calls UpdateRequests 
-  //which updates a specific labs requestsList on firestore with the current users email.
+  //which updates a specific labs requests List on firestore with the current users email.
   async function requestHelp(){
 		try{
       alert("Requesting help");
@@ -389,10 +389,11 @@ const Room = (props) => {
 							<div id="dash-y" className="animate__animated animate__bounceInDown animate__delay-1s"></div>
 							<div id="dash-z" className="animate__animated animate__bounceInDown animate__delay-2s" ></div>
 						</div>
-
 					</div>
-          <div className="w-100 text-center mt-2" style={{right: "-75vw", top: "-30vh", position:"relative",height:"45vh"}}>
-						<ul className="nav flex-row">
+          <p id="type-line" className="animate-type" style={{color:"white", top:"-25vh", left:"5vw"}}>{"< "}User: {auth.currentUser.email} {"/>"} </p>
+          
+          <div className="w-100 text-center mt-2" style={{right: "-75vw", top: "-35vh", position:"relative",height:"45vh"}}>
+            <ul className="nav flex-row">
             <Button onClick={handleRoom}style={{backgroundColor:"#1f2647", marginLeft:"2.5vw", width:"5vw", height: "8vh"}}>
                   <h6> Back to lobby </h6>
               </Button>

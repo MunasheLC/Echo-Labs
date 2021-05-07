@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button} from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
-import LabRoom from "./getUserLabRooms"
+import LabRoom from "./DisplayUserLabRooms"
 import { getUserPermissions } from './Admin'
 import './Dashboard.css'
 
