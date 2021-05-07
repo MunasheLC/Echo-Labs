@@ -64,9 +64,10 @@ const Room = (props) => {
   const echoEditor = useRef(null); // Ref is used to get access to the aceEditor functions -> used to update the value of the editor
   const history = useHistory() //Hisory hook
   const hist = useHistory();
- const [echoConsoleLogs, setEchoConsoleLogs] = useState("");
+  const [echoConsoleLogs, setEchoConsoleLogs] = useState("");
   // console.log("python", PythonShell)
-  
+
+  console.log("Editor LOG", echoEditor)
 
   //tutorCheck - Called when a peer is leaving, this checks if the peer leaving is a tutor, 
   //if so remove the student from the request list on firestore as request has been satified. 
@@ -222,10 +223,21 @@ const Room = (props) => {
     // Conncet to socket server
     socketRef.current = io.connect("/");
 
+    let hasCam = null
+    let hasMic = null
+    //Check if a user has a mic and camera
+    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+     hasCam = devices.some(function(d) {
+      return d.kind === "videoinput"; });
+     hasMic = devices.some(function(d) { return d.kind === "audioinput"; });
+     console.log("Cam: ", hasCam)
+     console.log("Mic: ", hasCam)
+    })
+
     navigator.mediaDevices
       .getUserMedia({
-        video: videoConstraints,
-        audio: true,
+        video: hasCam,
+        audio: hasMic,
 
         // stream contains both audio and video
       })
@@ -233,6 +245,9 @@ const Room = (props) => {
         //attach stream to userVideo Ref, allows us to display video
         userVideo.current.srcObject = stream;
         userTracks.current = stream;
+
+        //Apply constraints 
+        userTracks.current.getVideoTracks(0)[0].applyConstraints(videoConstraints)
 
         console.log("The stream object", userVideo);
 
