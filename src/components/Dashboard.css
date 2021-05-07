@@ -44,7 +44,15 @@ video#partnerVid {
   height: 70vh;
   border: transparent;
   position: relative;
-  top: -75vh;
+  top: -76vh;
+  left: 45vh;
+}
+#dash-card-container1 {
+  width: 40vw;
+  height: 70vh;
+  border: transparent;
+  position: relative;
+  top: -80vh;
   left: 45vh;
 }
 
@@ -85,6 +93,16 @@ video#partnerVid {
   transition: 0.5s;
   background-color: #8c19ff;
   margin-bottom: 30px;
+}
+#lab-card-style-4:hover {
+  color: white;
+  position: relative;
+  background-color: #00ffeea1;
+}
+#lab-card-style-4:hover:before {
+  content: attr(data-hover);
+  left: 35%;
+  position: relative;
 }
 
 #lab-card-style-1:hover,

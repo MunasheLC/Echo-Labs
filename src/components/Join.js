@@ -8,11 +8,12 @@ import { db } from "../firebase"
 import firebase from 'firebase/app'
 import { useState, useGlobal } from 'react'
 import { Modal} from "react-bootstrap"
-var lab = "";
 import {useHistory } from "react-router-dom"
 import {getLab} from './CreateRoom';
 
-export const addUserToLabList = async(labID) =>{ //adds the labid to the user's user collections lab field in firestore
+var lab = "";
+
+export const addLabToUsersDocument = async(labID) =>{ //adds the labid to the user's user collections lab field in firestore
   const usercollection = db.collection('users');
   const currentUser = auth.currentUser;
   const email = currentUser.email; //get current users email 
@@ -59,7 +60,7 @@ export default function Join(){
               Lab_Admins : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email) //add current users email to lab admins in firestore
           })
             admin = true;
-            addUserToLabList(doc.id) // if key is valid add lab to users firestore lab list, display lab on their dashboard
+            addLabToUsersDocument(doc.id) // if key is valid add lab to users firestore lab list, display lab on their dashboard
             document.getElementById("printStatus").innerHTML="You have been granted access to: " + lab + " as a tutor. This lab will now displayed in your Lab Rooms";
             handleVisability();
           });
@@ -80,7 +81,7 @@ export default function Join(){
               Lab_Students : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email) //add current user as a student in firestore .
           })
             admin=false;
-            addUserToLabList(doc.id)
+            addLabToUsersDocument(doc.id)
             document.getElementById("printStatus").innerHTML="Successfully joined : " + lab;
             handleVisability();
 

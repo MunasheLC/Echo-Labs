@@ -19,6 +19,7 @@ import {getLobbyID} from './Host'
 import {UpdateRequests} from './Requests';
 import {getLabData} from './Host';
 import {removeUserFromRequestList} from './Requests'
+import { useAuth } from "../contexts/AuthContext"
 
 // Styled component acts as as container
 const Container = styled.div`
@@ -65,6 +66,7 @@ const Room = (props) => {
   const history = useHistory() //Hisory hook
   const hist = useHistory();
   const [echoConsoleLogs, setEchoConsoleLogs] = useState("");
+  const { currentUser } = useAuth()
   // console.log("python", PythonShell)
 
   console.log("Editor LOG", echoEditor)
@@ -92,13 +94,14 @@ const Room = (props) => {
       var labID = await getLabData(lab);
       //if user is tutor remove the student from requests when going back into lobby
       tutorCheck(labID);
+      handleLeave()
 			getLobbyID(lab).then((value) => {hist.push(`/Lobby/${value}`)});
 
 		} catch{
 		}
 	}
   //used when someone presses request Help - Function calls UpdateRequests 
-  //which updates a specific labs requestsList on firestore with the current users email.
+  //which updates a specific labs requests List on firestore with the current users email.
   async function requestHelp(){
 		try{
       alert("Requesting help");
@@ -188,7 +191,7 @@ const Room = (props) => {
 
       userTracks.current.getTracks().forEach(track => track.stop());
       socketRef.current.disconnect()
-      history.push("/")
+     
       
     }
   
@@ -251,8 +254,10 @@ const Room = (props) => {
 
         console.log("The stream object", userVideo);
 
+        const clientID = currentUser.uid
+        const infoToServer = {roomID, clientID}
         // Tell Server we're tryna join the room. Emitting event "join room" Check server,js
-        socketRef.current.emit("join-room", roomID);
+        socketRef.current.emit("join-room", infoToServer);
 
         // When second user joins, send the first user their ID
         socketRef.current.on("user-connection", (users) => {
@@ -404,10 +409,11 @@ const Room = (props) => {
 							<div id="dash-y" className="animate__animated animate__bounceInDown animate__delay-1s"></div>
 							<div id="dash-z" className="animate__animated animate__bounceInDown animate__delay-2s" ></div>
 						</div>
-
 					</div>
-          <div className="w-100 text-center mt-2" style={{right: "-75vw", top: "-30vh", position:"relative",height:"45vh"}}>
-						<ul className="nav flex-row">
+          <p id="type-line" className="animate-type" style={{color:"white", top:"-25vh", left:"5vw"}}>{"< "}User: {auth.currentUser.email} {"/>"} </p>
+          
+          <div className="w-100 text-center mt-2" style={{right: "-75vw", top: "-35vh", position:"relative",height:"45vh"}}>
+            <ul className="nav flex-row">
             <Button onClick={handleRoom}style={{backgroundColor:"#1f2647", marginLeft:"2.5vw", width:"5vw", height: "8vh"}}>
                   <h6> Back to lobby </h6>
               </Button>
@@ -478,10 +484,7 @@ const Room = (props) => {
               <div onClick={stopVideo} className="media-controls">
                 <Button>Camera</Button>
               </div>
-
-              <div className="media-controls">
-                <Button onClick={handleLeave}>Leave</Button>
-              </div>
+              
             </div>
           </div>
         </div>

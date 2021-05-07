@@ -27,13 +27,14 @@ const Participants = (props) => {
         }
     }
     
-    const getParticipants = async(labid) => { //gets the participant list from the labid on firestore
+    //gets the participant list using the labid on firestore
+    const getParticipants = async(labid) => { 
         const students = [];
         const tutorArray = [];
         const labDoc = await db.doc(`labs/${labid}`).get();
         const labData = labDoc.data();
         const participants = labData.Participants;
-        const tutors = labData.Lab_Admins; //gets tutors
+        const tutors = labData.Lab_Admins; //gets list of tutors
         if (participants){
             participants.forEach((participant:String) => {  //for each participant ( FYI these are user emails ) in the participant list
                 if (!tutors.includes(participant)){ //if the participant is not a tutor add them to the student list
@@ -85,8 +86,18 @@ export const removeUserFromLabList = async(lab) =>{
         const labcollection = db.collection('labs');
         const labCheck = await labcollection.where('Lab_Name', '==', lab).get();
         if (labCheck){
-            labCheck.forEach(doc =>{
-                                                                                                                                                                                                                                                                                                                               const labDoc = db.collection('labs').doc(doc.id);
+            labCheck.forEach(doc =>{                                                                                                                                                                                                                                                                                                      const labDoc = db.collection('labs').doc(doc.id);
+                 labDoc.update({
+                    Participants: firebase.firestore.FieldValue.arrayRemove(email)
+                 })
+              });
+         }
+    }
+    export const removeAllFromLab = async(email,lab) =>{
+        const labcollection = db.collection('labs');
+        const labCheck = await labcollection.where('Lab_Name', '==', lab).get();
+        if (labCheck){
+            labCheck.forEach(doc =>{                                                                                                                                                                                                                                                                                                      const labDoc = db.collection('labs').doc(doc.id);
                  labDoc.update({
                     Participants: firebase.firestore.FieldValue.arrayRemove(email)
                  })

@@ -30,14 +30,13 @@ const DisplayRequests = (props) => {
             <div id ="row2" className="lab-row">
             {
                 array.map(value =>(
-                
+                    <Link to="/test" onClick={(event) => checkPeerRoom(value)} className = 'lab-links' style={{textDecoration: "none"}}>
                 <Card id="lab-card-style-3" key={shortid.generate()} >
                   <Card.Body>
-                  <Link to="/test" onClick={(event) => checkPeerRoom(value)} className = 'lab-links' style={{textDecoration: "none"}}>
                       <h5 className="dash-cards-h3">{value}</h5>   
-                      </Link>
                   </Card.Body>
               </Card>  
+              </Link>
                 ))
                 }
             </div>

@@ -6,7 +6,7 @@ import "firebase/firestore"
 import { auth } from "../firebase"
 import { db } from "../firebase"
 import firebase from 'firebase/app'
-import { addUserToLabList } from './Join'
+import { addLabToUsersDocument } from './Join'
 import { v4 as uuid } from "uuid"
 
 
@@ -72,7 +72,7 @@ export default function CreateUserLabRoom(){
     const labCheck = await labcollection.where('Lab_Name', '==', labroomName).get();
     if (labCheck){
       labCheck.forEach(doc =>{
-        addUserToLabList(doc.id);
+        addLabToUsersDocument(doc.id);
         addUserToAdminList(doc.id); //added this to add host to tutor list in labroom.
       });
     }
