@@ -3,6 +3,7 @@ import { Link} from "react-router-dom";
 import shortid from 'shortid';
 import {auth, db } from "../firebase";
 
+var datahover = "Available";
 const DisplayParticipants = (props) => {
     const {
         array,
@@ -30,7 +31,7 @@ const DisplayParticipants = (props) => {
             <div id ="row3" className="lab-row">
                 {
                 tutors.map(value => (
-                <Card id="lab-card-style-4" className="tutors" style={{}} key={shortid.generate()}>
+                <Card id="lab-card-style-4" data-hover={datahover} className="tutors" style={{}} key={shortid.generate()}>
                     <Link to='/test'  className = 'lab-links' style={{textDecoration: "none"}}>
                     <Card.Body>
                         {/* display the lab card and its name(.Lab_Name taken from the lab collection in firestore) on the dashboard */}
@@ -61,17 +62,20 @@ const checkInCall = async(email) =>{
                 })
         }
 }
+
 //Function that checks if a user is in a call, if so display their card in lobby as busy and change background color
 const checkCall=async(docid)=>{
     const userDoc = await db.doc(`users/${docid}`).get(); 
     const userData = userDoc.data();
     const userinCall = userData.inCall;
-    console.log("userincall" + userinCall);
 
     if (userinCall == true){
-        document.getElementById('lab-card-style-4').style.background='#CF6679';
-        document.getElementById('tutorCard').style.color='white';
-        document.getElementById('tutorCard').innerHTML='Busy';
+        // document.getElementById('lab-card-style-4').style.background='#CF6679';
+        // document.getElementById('tutorCard').style.color='white';
+        datahover='In Call';
+    }
+    else{
+        datahover = "Available";
     }
 }
 //Function that updates a users call status to true on firestore
