@@ -1,11 +1,11 @@
-import React, { useState, useGlobal } from 'react'
+import React, { useEffect,useState, useGlobal } from 'react'
 import { Modal, Card, Button} from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import Participants from "./Participants"
 import {removeUserFromLabList} from "./Participants"
 import './Dashboard.css'
-import { getuserRoomID } from './Host'
+import { checkLabActive, getuserRoomID } from './Host'
 import {getLab3} from './Room'
 import {getLabData} from './Host'
 import Requests from './Requests';
@@ -17,6 +17,7 @@ export default function Lobby() {
 
 	const [error, setError] = useState("")
 	const { currentUser, logout } = useAuth()
+	const [activeStatus, setter] = useState("")
 	const history = useHistory()
 	const hist = useHistory()
 
@@ -43,23 +44,41 @@ export default function Lobby() {
 		}
 
 	}
+
+
+	useEffect(async() => {
+		    console.log("inUseEffect");
+			var labid = await getLabData(lab);
+			const labDoc = await db.doc(`labs/${labid}`).get();
+        	const labData = labDoc.data();
+			const isActive =  labData.LabActive;
+			if (isActive == false){
+				hist.push("/")
+			}
+		},[activeStatus]);
+
 	//removes all users from the participant list when the host clicks end lab
 	async function handleEndLab(){
 		setError("")
 
 		try{
-			console.log("handleEndLab")
 		    var labid = await getLabData(lab);
 			const labDoc = await db.doc(`labs/${labid}`).get();
-			console.log(labDoc)
         	const labData = labDoc.data();
+
+			const labActive = {LabActive: false};
+    		db.doc(`/labs/${labid}`).set(labActive, {merge:true});
+
         	const participants = labData.Participants;
-			console.log(participants)
+			const isActive =  labData.LabActive;
+			console.log("isActive " + isActive);
+			setter(isActive);
+
         	if (participants){
             	participants.forEach((participant:String) => {  //for each participant ( FYI these are user emails ) in the participant list
 					removeAllFromLab(participant,lab);
-					hist.push("/dashboard")
             });
+			hist.push("/")
         }
 
 		} catch{
@@ -100,9 +119,24 @@ export default function Lobby() {
 		}
 
 	}
+	async function checkActive(){
+		var labid = await getLabData(lab);
+		//onSnapshot is called again when state of the lab fields changes.
+		db.collection('labs').doc(labid)
+    	.onSnapshot((doc) => {
+        const all = doc.data();
+		const active = all.LabActive;
+		if (active == false){
+			hist.push("/")
+		}
+    });
+
+	}
 	function Check(){
 		checkTutors();
+		checkActive();
 	}
+
 
 	return (
 		<>
@@ -139,7 +173,6 @@ export default function Lobby() {
 							<Button variant="danger" onClick={handleEndLab} id="endButton" style={{backgroundColor:"#1f2647", marginLeft:"2.5vw", marginTop:"0.5vw" ,width:"15vw", display:"none"}}>
 								<h2 className="Button-text-1">End Lab</h2>
 							</Button>
-
 							<Modal show={makeVisable} onHide={handleClose} animation={false}>
 								<Modal.Header closeButton>
 									<Modal.Title>Requests</Modal.Title>
