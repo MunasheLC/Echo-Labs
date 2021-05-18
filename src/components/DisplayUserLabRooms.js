@@ -18,8 +18,17 @@ class DisplayUserLabRooms extends React.Component {
     
         const labArray  = await getLabsToDisplay(); //creates a new array which is populated with the result of lab.data()
         console.log(labArray);
-        this.setState({ labArray});  
+        
+        if (labArray == null){
+          console.log("is empty");
+        }
+        if (labArray !=null){
+          if (labArray.length !=0){
+            this.setState({ labArray});  
+          }
+        }
       }
+  
 
   render(){ 
     const array = this.state.labArray;
