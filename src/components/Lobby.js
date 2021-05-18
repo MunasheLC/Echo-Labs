@@ -166,7 +166,7 @@ export default function Lobby() {
 								<i className="fas fa-bug"><h2 className="Button-text-1">Start Coding</h2></i>
 							</Button>
 
-							<Button id="requestButton" onClick={handleVisability}>
+							<Button id="requestButton" onClick={handleVisability} style={{backgroundColor:"#1f2647", marginLeft:"2.5vw", width:"15vw", display:"none"}}>
 								<i className="fas fa-bug"><h2 className="Button-text-1">Requests</h2></i>
 							</Button>
 							{Check()}

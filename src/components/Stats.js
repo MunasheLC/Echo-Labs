@@ -8,6 +8,7 @@ import { Bar } from 'react-chartjs-2';
 import { render } from "@testing-library/react";
 import { useHistory } from "react-router-dom"
 import { withTheme } from "styled-components";
+import {getLabData} from "./Host";
 
 
 
@@ -15,26 +16,54 @@ const BarChartt=()=>{
   const hist = useHistory();
 
     const [state, setter] = useState([])
+    const [counter, setCount] = useState([])
 
     async function handleLeave(){
   
       try{
-        hist.push("/dashboard")
+        hist.push("/")
   
       } catch{
       }
   
     }
 
+    const labCount=[]
+
+    const getLabCount = async(value)=>{
+        console.log("chekc value" + value);
+        var labid = await getLabData(value);
+        const labDoc = await db.doc(`labs/${labid}`).get();
+        const labData = labDoc.data();
+        const count = labData.Counter;
+        if(count){
+          console.log("check count" + count);
+          labCount.push(count);
+        }
+        else{
+          labCount.push(1);
+        }
+        console.log(labCount);
+    };
+
+    useEffect(()=>{
+      const interval = setInterval(async() => {
+      setCount(labCount);
+    },2000); //runs every 2 seconds
+    return () => clearInterval(interval);
+    },[]);
+
     useEffect(async() =>{
-    const lab = []
-    const labArray = await getLabsToDisplay();
-    console.log(" in getLabs1 " + labArray);
-    labArray.forEach((value:string) =>{
-      lab.push(value);
-    });
-    setter(lab);
-    console.log("state2" + state);
+      const lab = []
+      const labArray = await getLabsToDisplay();
+      labArray.forEach((value:string) =>{
+        lab.push(value);
+        getLabCount(value);
+      });
+
+      setter(lab);
+      console.log("state2" + state);
+      console.log("state3" + labCount);
   }, [])
 
   const option = {scales: { yAxes: [{ ticks: { beginAtZero: true, fontColor:"#000" }, },], xAxes: [{ ticks: { beginAtZero: true, fontSize: 16 }, },], }, maintainAspectRatio:false }
@@ -55,6 +84,10 @@ const BarChartt=()=>{
 							<i className="fas fa-user-secret fa-3x center"></i>
 						</div>
 					</div>
+          <div className="w-100 text-center mt-2" style={{ top: "25vh" }} onClick={handleLeave}>
+
+            <h2 className="Button-text-1">Statistics</h2>
+        </div>
 
 			
           <div className="w-100 text-center mt-2" style={{ top: "25vh" }} onClick={handleLeave}>
@@ -66,20 +99,20 @@ const BarChartt=()=>{
 
 				</div>
 
-				<div id="dash-card-container1" >
+				<div id="dash-card-container1" style={{backgroundColor:"lightsteelblue",left:"23vw", top:"-75vh"}}>
          <Bar
           data={{
             labels: state, //labs array the user is in
             datasets: [{
-              label: 'Number of Participants for each lab session',
-              data: [12, 19, 3, 5, 2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], //calls a day
+              label: 'Number of Participants for each recent lab session',
+              data: counter,
               backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0. 2)'
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
               ],
               borderColor: [
                 'rgba(255, 99, 132, 1)',

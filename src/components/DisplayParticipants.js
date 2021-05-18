@@ -16,7 +16,7 @@ const DisplayParticipants = (props) => {
             {
                 array.map(value => (
                     <Card id="lab-card-style-3" key={shortid.generate()}>
-                <Link to='/test'  className = 'lab-links' style={{textDecoration: "none"}}>
+                <Link className = 'lab-links' style={{textDecoration: "none"}}>
                   <Card.Body>
                     {/* display the lab card and its name(.Lab_Name taken from the lab collection in firestore) on the dashboard */}
                       <h5 className="dash-cards-h3">{value}</h5>   
@@ -32,7 +32,7 @@ const DisplayParticipants = (props) => {
                 {
                 tutors.map(value => (
                 <Card id="lab-card-style-4" data-hover={datahover} className="tutors" style={{}} key={shortid.generate()}>
-                    <Link to='/test'  className = 'lab-links' style={{textDecoration: "none"}}>
+                    <Link className = 'lab-links' style={{textDecoration: "none"}}>
                     <Card.Body>
                         {/* display the lab card and its name(.Lab_Name taken from the lab collection in firestore) on the dashboard */}
                         <h5 id="tutorCard" className="dash-cards-h3">{value}</h5>  

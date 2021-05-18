@@ -21,7 +21,7 @@ const Participants = (props) => {
              labCheck.forEach(doc =>{ 
                  const labDoc = db.collection('labs').doc(doc.id); //gets the labs document infomartion
                  labDoc.update({ //updates the labs fields in order to add the current users email to the participant list.
-                     Participants : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
+                     Participants : firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email),
                  })
              });
         }
@@ -62,17 +62,9 @@ const Participants = (props) => {
     };
     SetParticipants();
 
-    // const run=()=>{ //is this even needed?
-    //     useEffect(() => {
-    //     
-    //     //   console.log("in run");
-    //     }, [studentList, tutorList]);
-
-    // }
 
     return(
         <div>
-            {/* {run())} */}
             <DisplayParticipants array={studentList} tutors={tutorList}/>
         </div>
     )
@@ -82,13 +74,12 @@ export default Participants;
 
 
 export const removeUserFromLabList = async(lab) =>{
-        const email = auth.currentUser.email
         const labcollection = db.collection('labs');
         const labCheck = await labcollection.where('Lab_Name', '==', lab).get();
         if (labCheck){
             labCheck.forEach(doc =>{                                                                                                                                                                                                                                                                                                      const labDoc = db.collection('labs').doc(doc.id);
                  labDoc.update({
-                    Participants: firebase.firestore.FieldValue.arrayRemove(email)
+                    Participants: firebase.firestore.FieldValue.arrayRemove(auth.currentUser.email)
                  })
               });
          }

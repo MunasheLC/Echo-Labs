@@ -80,8 +80,10 @@ const Room = (props) => {
     const tutors = labData.Lab_Admins;
     
     if (tutors.includes(currentUserEmail)){ 
+          console.log("is tutor");
           removeUserFromRequestList(lab,student) 
           inCallFalse(currentUserEmail);
+          getLobbyID(lab).then((value) => {hist.push(`/Lobby/${value}`)});
     }
     else{
         console.log("is student");
@@ -94,9 +96,8 @@ const Room = (props) => {
       var labID = await getLabData(lab);
       //if user is tutor remove the student from requests when going back into lobby
       tutorCheck(labID);
-      handleLeave()
+      handleLeave();
 			getLobbyID(lab).then((value) => {hist.push(`/Lobby/${value}`)});
-
 		} catch{
 		}
 	}
@@ -188,7 +189,7 @@ const Room = (props) => {
 
     //Leave button function
     function handleLeave(){
-
+      console.log("in handleLeave");
       userTracks.current.getTracks().forEach(track => track.stop());
       socketRef.current.disconnect()
      
@@ -209,8 +210,6 @@ const Room = (props) => {
       setEchoConsoleLogs(result)
       
     })
-
-
   }
 
   //Clears the editor

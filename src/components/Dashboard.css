@@ -76,12 +76,12 @@ video#partnerVid {
   background-color: #6292bada;
   margin-bottom: 30px;
 }
-#requestButton {
+/* #requestButton {
   background-color: #1f2647;
   margin-left: 2.5vw;
   width: 15vw;
   display: none;
-}
+} */
 .ace_editor * {
   font-family: monospace !important;
 }

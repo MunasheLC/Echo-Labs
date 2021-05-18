@@ -6,9 +6,8 @@ import "firebase/firestore"
 import { v4 as uuid } from "uuid"
 
 
-function updateUserInfo(){
+export function updateUserInfo(){
     const currentUser = auth.currentUser; 
-    const uid = uuid();
     if (currentUser){
         const uid = currentUser.uid;
         const email = currentUser.email;
@@ -21,7 +20,6 @@ function updateUserInfo(){
         }
     }
 }
-
 
 /* Firebase has some more fleshed out versions of this stuff I'll try add alter*/
 
@@ -91,7 +89,6 @@ export function AuthProvider({ children }) {
             console.log(user)
             setCurrentUser(user)
             setLoading(false)
-            updateUserInfo()
             
         })
 
